@@ -54,7 +54,7 @@ class AgoraClient {
   async startStream({audio=true, video=true, screen=false}) {
     this.checkClient();
     const streamID = this.getRandomStreamId();
-    const stream = enhanceAgoraRTC.createStream({
+    const stream = enhancedAgoraRTC.createStream({
       audio,
       video,
       screen,

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {StreamPlayer, AgoraClient, AgoraConfigBuilder} from '../agora';
 import {STORE_TYPE} from '../store';
-import {errorActions} from '../store/actions';
+import {errorActions, clientActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
 import {AgoraEvents} from '../agora';
 import {isEmpty} from 'loadsh';
