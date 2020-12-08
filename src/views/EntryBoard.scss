@@ -1,8 +1,15 @@
 .entry-board {
   display: flex;
   flex-direction: row;
-  width: 300px;
+  width: 250px;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
   margin: 20px auto auto;
+
+  .join-meeting, .new-meeting, .config-meeting {
+    width: 100px;
+    margin-top: 20px;
+    margin-right: auto;
+  }
 }

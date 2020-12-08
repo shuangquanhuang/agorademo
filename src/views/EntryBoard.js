@@ -1,7 +1,6 @@
 import React from 'react';
-import NewMeeting from './NewMeeting';
-import JoinMeeting from './JoinMeeting';
-import {Container} from 'react-bootstrap';
+import {Button, Container} from 'react-bootstrap';
+import ConfigInput from './ConfigInput';
 import JoinMeetingInput from './JoinMeetingInput';
 import {entryBoardActions, meetingStatusActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
@@ -20,9 +19,17 @@ const EntryBoard = (props) => {
   return (
     <Container>
       <div className={'entry-board'}>
-        <NewMeeting/>
-        <JoinMeeting/>
+        <div className={'new-meeting'}>
+          <Button variant="outline-primary">New Meeting</Button>
+        </div>
+        <div className={'join-meeting'}>
+          <Button variant="outline-success" onClick={() => props.setJointMeetingInputVisible(true)}>Join Meeting</Button>
+        </div>
+        <div className={'config-meeting'}>
+          <Button variant="outline-info" onClick={() => props.setConfigInputVisible(true)}>Config Meeting</Button>
+        </div>
         <JoinMeetingInput show={props.showJoinMeetingInput} onSubmit={onJoinMeeting}/>
+        <ConfigInput show={props.showConfigInput}/>
       </div>
     </Container>
   );
@@ -35,7 +42,8 @@ export default connect(
     }
   },
   {
-    setShowJoinMeetingInput: entryBoardActions.setShowJoinMeetingInput,
+    setJointMeetingInputVisible: entryBoardActions.setJointMeetingInputVisible,
+    setConfigInputVisible: entryBoardActions.setConfigInputVisible,
     setMeetingStarted: meetingStatusActions.setMeetingStarted,
   }
 )(EntryBoard);

@@ -16,7 +16,7 @@ const JoinMeetingInput = (props) => {
   }
 
   const onCancel = () => {
-    props.setHideJoinMeetingInput();
+    props.setJointMeetingInputVisible(false);
   }
 
   const onSubmit = () => {
@@ -24,7 +24,7 @@ const JoinMeetingInput = (props) => {
     props.setToken(token);
     props.setApplicationId(applicationId);
     props.setUserId(userId);
-    props.setHideJoinMeetingInput();
+    props.setJointMeetingInputVisible(false);
     props.onSubmit();
   }
 
@@ -90,7 +90,7 @@ const JoinMeetingInput = (props) => {
 export default connect(
   null,
   {
-    setHideJoinMeetingInput: entryBoardActions.setHideJoinMeetingInput,
+    setJointMeetingInputVisible: entryBoardActions.setJointMeetingInputVisible,
     setToken: authActions.setToken,
     setApplicationId: authActions.setApplicationId,
     setChannel: authActions.setChannel,
