@@ -1,16 +1,53 @@
 import React from 'react';
+import {Modal, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
-import './ErrorCard.scss';
+import {errorActions} from '../store/actions';
+import {typedSelector} from '../store/selectors';
+import {STORE_TYPE} from '../store';
 
 const ErrorCard = (props) => {
 
+  const onHide = () => {
+    props.setError(null);
+  }
+
   return (
-    <div className={"error-card"}>
-      error
+    <div>
+      <Modal
+        show={props.shouldVisible}
+        aria-labelledby={"contained-modal-title-vcenter"}
+        centered
+        onHide={onHide}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Error
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Something Wrong, Close to back to homepage</p>
+          <p>
+            {props.error.message || ""}
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={onHide}>OK</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   )
 }
 
 export default connect(
-  null
+  state => {
+    const {error} = typedSelector(state, STORE_TYPE.ERROR);
+
+    return {
+      error,
+      shouldVisible: error != null,
+    };
+  },
+  {
+    setError: errorActions.setError,
+  }
 )(ErrorCard);

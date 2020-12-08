@@ -1,5 +1,5 @@
 const AgoraEvents = {
-  STREAM_PUBLISHD: 'stream_published',
+  STREAM_PUBLISHD: 'stream-published',
   STREAM_ADDED: 'stream-added',
   STREAM_SUBSCRIBED: 'stream-subscribed',
   PEER_LEAVE: 'peer-leave',

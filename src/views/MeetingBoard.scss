@@ -1,5 +1,10 @@
 .meeting-board {
-  width: 500px;
-  height: 400px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  width: 960px;
+  height: 720px;
   margin: auto;
 }

@@ -4,6 +4,7 @@ import {STORE_TYPE} from './store';
 import {typedSelector} from './store/selectors';
 import EntryBoard from './views/EntryBoard';
 import MeetingBoard from './views/MeetingBoard';
+import ErrorCard from './views/ErrorCard';
 import {connect} from 'react-redux';
 import {clientActions} from './store/actions';
 
@@ -11,8 +12,7 @@ function App(props) {
 
   const currentBoard = () => {
     if (props.error) {
-      // return <ErrorCard/>
-      return <EntryBoard/>
+      return <ErrorCard/>
     }
 
     if (props.meetingStarted) {
