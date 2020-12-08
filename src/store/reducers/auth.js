@@ -5,8 +5,11 @@ const initialState = {
   channel: null,
   applicationId: null,
   token: null,
+  userId: null,
 };
 
-const authReducer = createReducer(STORE_TYPE.AUTH, initialState);
+const reducer = createReducer(STORE_TYPE.AUTH, initialState);
 
-export default authReducer;
+export {
+  reducer,
+};

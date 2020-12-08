@@ -3,7 +3,7 @@ import NewMeeting from './NewMeeting';
 import JoinMeeting from './JoinMeeting';
 import {Container} from 'react-bootstrap';
 import JoinMeetingInput from './JoinMeetingInput';
-import {entryBoardActions} from '../store/actions';
+import {entryBoardActions, meetingStatusActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
 import {STORE_TYPE} from '../store';
 import {connect} from 'react-redux';
@@ -14,6 +14,7 @@ const EntryBoard = (props) => {
 
   const onJoinMeeting = () => {
     console.log('starting join meeting');
+    props.setMeetingStarted(true);
   }
 
   return (
@@ -34,6 +35,7 @@ export default connect(
     }
   },
   {
-    setShowJoinMeetingInput: entryBoardActions.setShowJoinMeetingInput
+    setShowJoinMeetingInput: entryBoardActions.setShowJoinMeetingInput,
+    setMeetingStarted: meetingStatusActions.setMeetingStarted,
   }
 )(EntryBoard);

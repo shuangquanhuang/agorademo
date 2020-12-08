@@ -5,6 +5,8 @@ const initState = {
   showJoinMeetingInput: false,
 }
 
-const meetingStatusReducer = createReducer(STORE_TYPE.ENTRY_BOARD, initState);
+const reducer = createReducer(STORE_TYPE.ENTRY_BOARD, initState);
 
-export default meetingStatusReducer;
+export {
+  reducer,
+};

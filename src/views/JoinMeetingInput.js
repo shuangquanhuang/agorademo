@@ -1,21 +1,18 @@
 import {Modal, Button, Container, Row, Col} from 'react-bootstrap';
 import {connect} from 'react-redux';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import  {isEmpty} from 'loadsh';
 import classNames from 'classnames';
 import {authActions, entryBoardActions} from '../store/actions';
 
 const JoinMeetingInput = (props) => {
-  const [applicationId, setApplicationId] = useState("");
-  const [channelName, setChannelName] = useState("");
-  const [token, setToken] = useState("");
-
-  // useEffect(() => {
-  //   setApplicationId("");
-  // });
+  const [applicationId, setApplicationId] = useState("f29ca80ee12c4e2aa63e2c0c7a0a0c9d");
+  const [channelName, setChannelName] = useState("asd");
+  const [token, setToken] = useState("006f29ca80ee12c4e2aa63e2c0c7a0a0c9dIAAyQNB+i8KJanGIVPtwbp/Wkeo1RbulZbdROmZ0Kw+bHXH3mfgAAAAAEAC3euZptYPQXwEAAQC1g9Bf");
+  const [userId, setUserId] = useState("123");
 
   const isInputValid = () => {
-    return !isEmpty(applicationId) && !isEmpty(channelName) && !isEmpty(token);
+    return !isEmpty(applicationId) && !isEmpty(channelName) && !isEmpty(token) && !isEmpty(userId);
   }
 
   const onCancel = () => {
@@ -23,10 +20,11 @@ const JoinMeetingInput = (props) => {
   }
 
   const onSubmit = () => {
-    props.setHideJoinMeetingInput();
     props.setChannel(channelName);
     props.setToken(token);
     props.setApplicationId(applicationId);
+    props.setUserId(userId);
+    props.setHideJoinMeetingInput();
     props.onSubmit();
   }
 
@@ -51,6 +49,14 @@ const JoinMeetingInput = (props) => {
               </Col>
               <Col xs={8}>
                 <input placeholder={'Application ID'} value={applicationId} onChange={(event) => setApplicationId(event.target.value)}/>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={4}>
+                <span>User ID:</span>
+              </Col>
+              <Col xs={8}>
+                <input placeholder={'User ID'} value={userId} onChange={(event) => setUserId(event.target.value)}/>
               </Col>
             </Row>
             <Row>
@@ -88,5 +94,6 @@ export default connect(
     setToken: authActions.setToken,
     setApplicationId: authActions.setApplicationId,
     setChannel: authActions.setChannel,
+    setUserId: authActions.setUserId,
   }
 )(JoinMeetingInput);

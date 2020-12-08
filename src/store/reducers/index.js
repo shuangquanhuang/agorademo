@@ -1,13 +1,18 @@
 import {combineReducers} from 'redux';
-import meetingStatusReducer from './MeetingStatus';
-import authReducer from './Auth';
-import entryBoardReducer from './EntryBoard';
+import {reducer as meetingStatusReducer} from './meetingstatus';
+import {reducer as authReducer} from './auth';
+import {reducer as entryBoardReducer} from './entryboard';
+import {reducer as clientReducer} from './client';
+import {reducer as errorReducer} from './error';
+
 import STORE_TYPE from '../type';
 
 const rootReducer = combineReducers({
   [STORE_TYPE.MEETING_STATUE]: meetingStatusReducer,
   [STORE_TYPE.AUTH]: authReducer,
   [STORE_TYPE.ENTRY_BOARD]: entryBoardReducer,
+  [STORE_TYPE.CLIENT]: clientReducer,
+  [STORE_TYPE.ERROR]: errorReducer,
 });
 
 export default rootReducer;
