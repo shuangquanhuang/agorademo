@@ -100,7 +100,7 @@ const MeetingBoard = (props) => {
     const streams = [];
     if (localStream) {
       streams.push(
-        <StreamPlayer stream={localStream} label={"local"} key={"local"}/>
+        <StreamPlayer stream={localStream} label={'local'} key={'local'}/>
       )
     }
 
@@ -117,7 +117,7 @@ const MeetingBoard = (props) => {
   }
 
   return (
-    <div className={"meeting-board"}>
+    <div className={'meeting-board'}>
       {getStreams()}
     </div>
   )

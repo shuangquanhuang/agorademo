@@ -15,19 +15,19 @@ const ErrorCard = (props) => {
     <div>
       <Modal
         show={props.shouldVisible}
-        aria-labelledby={"contained-modal-title-vcenter"}
+        aria-labelledby={'contained-modal-title-vcenter'}
         centered
         onHide={onHide}
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+          <Modal.Title id='contained-modal-title-vcenter'>
             Error
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>Something Wrong, Close to back to homepage</p>
           <p>
-            {props.error.message || ""}
+            {props.error.message || ''}
           </p>
         </Modal.Body>
         <Modal.Footer>

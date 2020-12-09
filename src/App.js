@@ -23,8 +23,8 @@ function App(props) {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className='App'>
+      <header className='App-header'>
         <h1> Agora Meeting Demo</h1>
       </header>
       {currentBoard()}

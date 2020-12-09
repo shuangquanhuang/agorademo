@@ -6,10 +6,11 @@ import classNames from 'classnames';
 import {authActions, entryBoardActions} from '../store/actions';
 
 const JoinMeetingInput = (props) => {
-  const [applicationId, setApplicationId] = useState("f29ca80ee12c4e2aa63e2c0c7a0a0c9d");
-  const [channelName, setChannelName] = useState("asd");
-  const [token, setToken] = useState("006f29ca80ee12c4e2aa63e2c0c7a0a0c9dIAAyQNB+i8KJanGIVPtwbp/Wkeo1RbulZbdROmZ0Kw+bHXH3mfgAAAAAEAC3euZptYPQXwEAAQC1g9Bf");
-  const [userId, setUserId] = useState("123");
+  // TODO: remove default
+  const [applicationId, setApplicationId] = useState('f29ca80ee12c4e2aa63e2c0c7a0a0c9d');
+  const [channelName, setChannelName] = useState('asd');
+  const [token, setToken] = useState('006f29ca80ee12c4e2aa63e2c0c7a0a0c9dIAAyQNB+i8KJanGIVPtwbp/Wkeo1RbulZbdROmZ0Kw+bHXH3mfgAAAAAEAC3euZptYPQXwEAAQC1g9Bf');
+  const [userId, setUserId] = useState('123');
 
   const isInputValid = () => {
     return !isEmpty(applicationId) && !isEmpty(channelName) && !isEmpty(token) && !isEmpty(userId);
@@ -32,12 +33,12 @@ const JoinMeetingInput = (props) => {
     <div>
       <Modal
         show={props.show}
-        aria-labelledby={"contained-modal-title-vcenter"}
+        aria-labelledby={'contained-modal-title-vcenter'}
         centered
         onHide={onCancel}
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+          <Modal.Title id='contained-modal-title-vcenter'>
             Join Meeting
           </Modal.Title>
         </Modal.Header>

@@ -1,5 +1,5 @@
-import AgoraRTC from "agora-rtc-sdk";
-import enhanceAgoraRTC from "agoran-awe";
+import AgoraRTC from 'agora-rtc-sdk';
+import enhanceAgoraRTC from 'agoran-awe';
 import {CODEC, MODE, AgoraConfigBuilder} from './configbuilder';
 import {isEmpty} from 'loadsh';
 
@@ -18,22 +18,22 @@ class AgoraClient {
 
   checkClient() {
     if (this._client === null) {
-      throw new Error("client is not initialized");
+      throw new Error('client is not initialized');
     }
   }
 
   createClient(config) {
-    console.log("creating client");
+    console.log('creating client');
     config = this.checkConfig(config) ? config : AgoraConfigBuilder.defaultConfig();
     this._client = enhancedAgoraRTC.createClient(config);
     return this;
   }
 
   async init(applicationId) {
-    console.log("initing client...");
+    console.log('initing client...');
     this.checkClient();
     if (isEmpty(applicationId)) {
-      throw new Error("applicationId cannot be empty")
+      throw new Error('applicationId cannot be empty')
     }
     await this._client.init(applicationId);
   }

@@ -118,13 +118,13 @@ const ConfigInput = (props) => {
     <div>
       <Modal
         show={props.show}
-        aria-labelledby={"contained-modal-title-vcenter"}
+        aria-labelledby={'contained-modal-title-vcenter'}
         centered
-        size={"lg"}
+        size={'lg'}
         onHide={onCancel}
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+          <Modal.Title id='contained-modal-title-vcenter'>
             Config
           </Modal.Title>
         </Modal.Header>
@@ -135,8 +135,8 @@ const ConfigInput = (props) => {
                 <span>Camera:</span>
               </Col>
               <Col xs={9}>
-                <Dropdown size={"sm"}>
-                  <Dropdown.Toggle variant={"secondary"}>{selectedCamera && selectedCamera.label}</Dropdown.Toggle>
+                <Dropdown size={'sm'}>
+                  <Dropdown.Toggle variant={'secondary'}>{selectedCamera && selectedCamera.label}</Dropdown.Toggle>
                   <Dropdown.Menu>
                     {getCameraItems()}
                   </Dropdown.Menu>
@@ -148,8 +148,8 @@ const ConfigInput = (props) => {
                 <span>Microphone:</span>
               </Col>
               <Col xs={9}>
-                <Dropdown size={"sm"}>
-                  <Dropdown.Toggle variant={"secondary"}>{selectedMicrophone && selectedMicrophone.label}</Dropdown.Toggle>
+                <Dropdown size={'sm'}>
+                  <Dropdown.Toggle variant={'secondary'}>{selectedMicrophone && selectedMicrophone.label}</Dropdown.Toggle>
                   <Dropdown.Menu>
                     {getMicrophoneItems()}
                   </Dropdown.Menu>
@@ -161,8 +161,8 @@ const ConfigInput = (props) => {
                 <span>Codec:</span>
               </Col>
               <Col xs={9}>
-                <Dropdown size={"sm"}>
-                  <Dropdown.Toggle variant={"secondary"}>{selectedCodec}</Dropdown.Toggle>
+                <Dropdown size={'sm'}>
+                  <Dropdown.Toggle variant={'secondary'}>{selectedCodec}</Dropdown.Toggle>
                   <Dropdown.Menu>
                     {getCodecItems()}
                   </Dropdown.Menu>
@@ -174,8 +174,8 @@ const ConfigInput = (props) => {
                 <span>Mode:</span>
               </Col>
               <Col xs={9}>
-                <Dropdown size={"sm"}>
-                  <Dropdown.Toggle variant={"secondary"}>{selectedMode}</Dropdown.Toggle>
+                <Dropdown size={'sm'}>
+                  <Dropdown.Toggle variant={'secondary'}>{selectedMode}</Dropdown.Toggle>
                   <Dropdown.Menu>
                     {getModeItems()}
                   </Dropdown.Menu>
