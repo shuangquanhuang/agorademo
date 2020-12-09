@@ -4,16 +4,17 @@ import React, { useState } from 'react';
 import  {isEmpty} from 'loadsh';
 import classNames from 'classnames';
 import {authActions, entryBoardActions} from '../store/actions';
+import { typedSelector } from '../store/selectors';
+import { STORE_TYPE } from '../store';
 
-const JoinMeetingInput = (props) => {
+
+const JoinMeetingDialog = (props) => {
   // TODO: remove default
-  const [applicationId, setApplicationId] = useState('f29ca80ee12c4e2aa63e2c0c7a0a0c9d');
-  const [channelName, setChannelName] = useState('asd');
-  const [token, setToken] = useState('006f29ca80ee12c4e2aa63e2c0c7a0a0c9dIAAyQNB+i8KJanGIVPtwbp/Wkeo1RbulZbdROmZ0Kw+bHXH3mfgAAAAAEAC3euZptYPQXwEAAQC1g9Bf');
-  const [userId, setUserId] = useState('123');
+  const [channelName, setChannelName] = useState('');
+  const [token, setToken] = useState('');
 
   const isInputValid = () => {
-    return !isEmpty(applicationId) && !isEmpty(channelName) && !isEmpty(token) && !isEmpty(userId);
+    return !isEmpty(channelName) && !isEmpty(token);
   }
 
   const onCancel = () => {
@@ -23,9 +24,9 @@ const JoinMeetingInput = (props) => {
   const onSubmit = () => {
     props.setChannel(channelName);
     props.setToken(token);
-    props.setApplicationId(applicationId);
-    props.setUserId(userId);
     props.setJointMeetingInputVisible(false);
+
+
     props.onSubmit();
   }
 
@@ -49,7 +50,7 @@ const JoinMeetingInput = (props) => {
                 <span>Application ID:</span>
               </Col>
               <Col xs={8}>
-                <input placeholder={'Application ID'} value={applicationId} onChange={(event) => setApplicationId(event.target.value)}/>
+                <input placeholder={'Application ID'} value={props.applicationId} disabled/>
               </Col>
             </Row>
             <Row>
@@ -57,7 +58,7 @@ const JoinMeetingInput = (props) => {
                 <span>User ID:</span>
               </Col>
               <Col xs={8}>
-                <input placeholder={'User ID'} value={userId} onChange={(event) => setUserId(event.target.value)}/>
+                <input placeholder={'User ID'} value={props.userId} disabled/>
               </Col>
             </Row>
             <Row>
@@ -89,7 +90,14 @@ const JoinMeetingInput = (props) => {
 }
 
 export default connect(
-  null,
+  state => {
+    const {applicationId, userId} = typedSelector(state, STORE_TYPE.AUTH);
+
+    return {
+      applicationId,
+      userId,
+    };
+  },
   {
     setJointMeetingInputVisible: entryBoardActions.setJointMeetingInputVisible,
     setToken: authActions.setToken,
@@ -97,4 +105,4 @@ export default connect(
     setChannel: authActions.setChannel,
     setUserId: authActions.setUserId,
   }
-)(JoinMeetingInput);
+)(JoinMeetingDialog);

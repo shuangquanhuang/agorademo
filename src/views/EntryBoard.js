@@ -1,12 +1,13 @@
 import React from 'react';
 import {Button, Container} from 'react-bootstrap';
 import ConfigInput from './ConfigInput';
-import JoinMeetingInput from './JoinMeetingInput';
+import JoinMeetingDialog from './JoinMeetingDialog';
 import {entryBoardActions, errorActions, meetingStatusActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
 import {STORE_TYPE} from '../store';
 import {connect} from 'react-redux';
 import './EntryBoard.scss';
+import NewMeeingDialog from './NewMeeingDialog';
 
 
 const EntryBoard = (props) => {
@@ -16,14 +17,14 @@ const EntryBoard = (props) => {
   }
 
   const onNewMeeting = () => {
-    props.setError(new Error('This feature is still in progress.'));
+    
   }
 
   return (
     <Container>
       <div className={'entry-board'}>
         <div className={'new-meeting'}>
-          <Button variant='outline-primary' onClick={() => onNewMeeting()}>New Meeting</Button>
+          <Button variant='outline-primary' onClick={() => props.setNewMeetingInputVisible(true)}>New Meeting</Button>
         </div>
         <div className={'join-meeting'}>
           <Button variant='outline-success' onClick={() => props.setJointMeetingInputVisible(true)}>Join Meeting</Button>
@@ -31,8 +32,9 @@ const EntryBoard = (props) => {
         <div className={'config-meeting'}>
           <Button variant='outline-info' onClick={() => props.setConfigInputVisible(true)}>Config Meeting</Button>
         </div>
-        <JoinMeetingInput show={props.showJoinMeetingInput} onSubmit={onJoinMeeting}/>
-        <ConfigInput show={props.showConfigInput}/>
+        <JoinMeetingDialog show={props.showJoinMeetingDialog} onSubmit={onJoinMeeting}/>
+        <NewMeeingDialog show={props.showNewMeetingDialog} onSubmit={onNewMeeting}/>
+        <ConfigInput show={props.showConfigInputDialog}/>
       </div>
     </Container>
   );
@@ -46,8 +48,9 @@ export default connect(
   },
   {
     setJointMeetingInputVisible: entryBoardActions.setJointMeetingInputVisible,
+    setNewMeetingInputVisible: entryBoardActions.setNewMeetingInputVisible,
     setConfigInputVisible: entryBoardActions.setConfigInputVisible,
     setMeetingStarted: meetingStatusActions.setMeetingStarted,
-    setError: errorActions.setError,
+    setError: errorActions.setError,    
   }
 )(EntryBoard);

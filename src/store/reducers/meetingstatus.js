@@ -3,6 +3,7 @@ import createReducer from './common';
 
 const initState = {
   started: false,
+  creating: false,
 }
 
 const reducer = createReducer(STORE_TYPE.MEETING_STATUE, initState);
