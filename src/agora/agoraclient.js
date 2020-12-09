@@ -23,14 +23,12 @@ class AgoraClient {
   }
 
   createClient(config) {
-    console.log('creating client');
     config = this.checkConfig(config) ? config : AgoraConfigBuilder.defaultConfig();
     this._client = enhancedAgoraRTC.createClient(config);
     return this;
   }
 
   async init(applicationId) {
-    console.log('initing client...');
     this.checkClient();
     if (isEmpty(applicationId)) {
       throw new Error('applicationId cannot be empty')

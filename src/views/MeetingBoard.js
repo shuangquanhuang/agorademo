@@ -36,7 +36,6 @@ const MeetingBoard = (props) => {
     const {stream} = event;
     if (stream) {
       const streamId = stream.getId();
-      // console.log('remotestreams', remoteStreams.map(item => item.getId()));
       if (!remoteStreams.find(item => item.getId() === streamId)) {
         setRemoteStreams([...remoteStreams, stream]);
       }

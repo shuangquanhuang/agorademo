@@ -9,25 +9,13 @@ import {connect} from 'react-redux';
 import {clientActions} from './store/actions';
 
 function App(props) {
-
-  const currentBoard = () => {
-    if (props.error) {
-      return <ErrorCard/>
-    }
-
-    if (props.meetingStarted) {
-      return <MeetingBoard/>
-    }
-
-    return <EntryBoard/>
-  }
-
   return (
     <div className='App'>
       <header className='App-header'>
         <h1> Agora Meeting Demo</h1>
       </header>
-      {currentBoard()}
+      {props.meetingStarted ? <MeetingBoard/> : <EntryBoard/>}
+      {props.error && <ErrorCard/>}
     </div>
   );
 }
