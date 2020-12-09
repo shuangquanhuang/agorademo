@@ -25,8 +25,8 @@ const JoinMeetingDialog = (props) => {
   }
 
   const onSubmit = () => {
-    props.setChannel(channelName);
-    props.setToken(token);
+    props.setChannel(channelName || props.channelName);
+    props.setToken(token || props.token);
     props.setJointMeetingInputVisible(false);
 
     props.onSubmit();
