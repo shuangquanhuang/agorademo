@@ -124,17 +124,18 @@ const MeetingBoard = (props) => {
 
 export default connect(
   state => {
-    const {token, applicationId, channel} = typedSelector(state, STORE_TYPE.AUTH);
+    const {token, applicationId, channel, userId} = typedSelector(state, STORE_TYPE.AUTH);
     const {codec, mode, camera, microphone} = typedSelector(state, STORE_TYPE.CONFIG);
 
     return {
       applicationId,
       token,
+      userId,
       channel,
       codec,
       mode,
       camera,
-      microphone
+      microphone,
     };
   },
   {

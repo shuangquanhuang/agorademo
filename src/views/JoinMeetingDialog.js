@@ -10,11 +10,14 @@ import { STORE_TYPE } from '../store';
 
 const JoinMeetingDialog = (props) => {
   // TODO: remove default
-  const [channelName, setChannelName] = useState('');
-  const [token, setToken] = useState('');
+  const [channelName, setChannelName] = useState(props.channelName || '');
+  const [token, setToken] = useState(props.token || '');
 
   const isInputValid = () => {
-    return !isEmpty(channelName) && !isEmpty(token);
+    const channelNameValid = !isEmpty(channelName) || !isEmpty(props.channelName);
+    const tokenValid = !isEmpty(token) || !isEmpty(props.token);
+    
+    return channelNameValid && tokenValid;
   }
 
   const onCancel = () => {
@@ -25,7 +28,6 @@ const JoinMeetingDialog = (props) => {
     props.setChannel(channelName);
     props.setToken(token);
     props.setJointMeetingInputVisible(false);
-
 
     props.onSubmit();
   }
@@ -66,7 +68,7 @@ const JoinMeetingDialog = (props) => {
                 <span>Channel Name:</span>
               </Col>
               <Col xs={8}>
-                <input placeholder={'Channel Name'} value={channelName} onChange={(event) => setChannelName(event.target.value)}/>
+                <input placeholder={'Channel Name'} value={channelName || props.channelName} onChange={(event) => setChannelName(event.target.value)}/>
               </Col>
             </Row>
             <Row>
@@ -74,7 +76,7 @@ const JoinMeetingDialog = (props) => {
                 <span>Token:</span>
               </Col>
               <Col xs={8}>
-                <input placeholder={'Token'} value={token} onChange={(event) => setToken(event.target.value)}/>
+                <input placeholder={'Token'} value={token || props.token} onChange={(event) => setToken(event.target.value)}/>
               </Col>
             </Row>
           </Container>
@@ -91,11 +93,13 @@ const JoinMeetingDialog = (props) => {
 
 export default connect(
   state => {
-    const {applicationId, userId} = typedSelector(state, STORE_TYPE.AUTH);
+    const {applicationId, userId, channel:channelName, token} = typedSelector(state, STORE_TYPE.AUTH);
 
     return {
       applicationId,
       userId,
+      channelName,
+      token,
     };
   },
   {

@@ -6,15 +6,18 @@ import EntryBoard from './views/EntryBoard';
 import MeetingBoard from './views/MeetingBoard';
 import ErrorCard from './views/ErrorCard';
 import {connect} from 'react-redux';
-import {clientActions, authActions} from './store/actions';
+import {clientActions, authActions, configActions} from './store/actions';
 import { v4 as uuidv4 } from 'uuid';
+import { MODE, CODEC } from './agora';
 
 function App(props) {
   useEffect(() => {
     props.setUserId(uuidv4());
-    console.log('ebv', process.env);
+    props.setCodec(Object.values(CODEC)[0]);
+    props.setLiveMode(Object.values(MODE)[0])
     props.setApplicationId(process.env.REACT_APP_APPLICATION_ID);
   }, []);
+
   return (
     <div className='App'>
       <header className='App-header'>
@@ -40,5 +43,7 @@ export default connect(
     setClient: clientActions.setClient,
     setUserId: authActions.setUserId,
     setApplicationId: authActions.setApplicationId,
+    setCodec: configActions.setCodec,
+    setLiveMode: configActions.setLiveMode,
   }
 )(App);
