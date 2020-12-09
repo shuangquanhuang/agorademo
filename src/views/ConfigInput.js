@@ -1,7 +1,6 @@
 import {connect} from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import {Modal, Button, Container, Row, Col, Dropdown} from 'react-bootstrap';
-import classNames from 'classnames';
 import {AgoraClient, AgoraConfigBuilder, AgoraEvents, CODEC, MODE} from '../agora';
 import {authActions, configActions, entryBoardActions} from '../store/actions';
 import './ConfigInput.scss';
@@ -14,7 +13,7 @@ const ConfigInput = (props) => {
 
   const [cameraList, setCameraList] = useState([]);
   const [selectedCamera, setSelectedCamera] = useState(null);
-  const [mirophoneList, setMicrophoneList] = useState([]);
+  const [microphoneList, setMicrophoneList] = useState([]);
   const [selectedMicrophone, setSelectedMicrophone] = useState(null);
   const [codecList, ] = useState([...Object.values(CODEC)]);
   const [selectedCodec, setSelectedCodec] = useState(codecList[0]);
@@ -45,6 +44,7 @@ const ConfigInput = (props) => {
       .catch(() => {});
   }
 
+  // depends on [] so that useEffect will be executed/clean only once
   useEffect(() => {
     if (fakeClient) {
       const cameraUnsubscribe = fakeClient.addEventListener(AgoraEvents.CAMERA_CHANGED, onCameraChanged);
@@ -59,10 +59,6 @@ const ConfigInput = (props) => {
       }
     }
   }, []);
-
-  const isInputValid = () => {
-    return true;
-  }
 
   const onCancel = () => {
     props.setConfigInputVisible(false);
@@ -99,7 +95,7 @@ const ConfigInput = (props) => {
   };
 
   const getMicrophoneItems = () => {
-    return mirophoneList.map(microphone => {
+    return microphoneList.map(microphone => {
       return <Dropdown.Item key={microphone.deviceId} onSelect={() => onMicrophoneSelected(microphone)}>
         {microphone.label}
       </Dropdown.Item>
@@ -190,7 +186,7 @@ const ConfigInput = (props) => {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={onSubmit} className={classNames({'disabled': !isInputValid()})} >Submit</Button>
+          <Button onClick={onSubmit} >Submit</Button>
           <Button onClick={onCancel}>Cancel</Button>
         </Modal.Footer>
       </Modal>
