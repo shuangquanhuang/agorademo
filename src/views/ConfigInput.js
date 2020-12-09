@@ -1,30 +1,68 @@
 import {connect} from 'react-redux';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Modal, Button, Container, Row, Col, Dropdown} from 'react-bootstrap';
-import  {isEmpty} from 'loadsh';
 import classNames from 'classnames';
-import {AgoraClient, CODEC, MODE} from '../agora';
-import {authActions, entryBoardActions} from '../store/actions';
+import {AgoraClient, AgoraConfigBuilder, AgoraEvents, CODEC, MODE} from '../agora';
+import {authActions, configActions, entryBoardActions} from '../store/actions';
 import './ConfigInput.scss';
+
+const fakeClient = new AgoraClient().createClient(AgoraConfigBuilder.defaultConfig());
+
 
 const ConfigInput = (props) => {
 
 
-  const [cameraList, setCameraList] = useState(["camera1", "camera2"]);
-  const [selectedCamera, setSelectedCamera] = useState(cameraList[0]);
-  const [mirophoneList, setMicrophoneList] = useState(["micro 1", "mirco 2"]);
-  const [selectedMicrophone, setSelectedMicrophone] = useState(mirophoneList[0]);
-  const [codecList, setCodeList] = useState([...Object.values(CODEC)]);
+  const [cameraList, setCameraList] = useState([]);
+  const [selectedCamera, setSelectedCamera] = useState(null);
+  const [mirophoneList, setMicrophoneList] = useState([]);
+  const [selectedMicrophone, setSelectedMicrophone] = useState(null);
+  const [codecList, ] = useState([...Object.values(CODEC)]);
   const [selectedCodec, setSelectedCodec] = useState(codecList[0]);
-  const [modeList, setModeList] = useState([...Object.values(MODE)]);
+  const [modeList, ] = useState([...Object.values(MODE)]);
   const [selectedMode, setSelectedMode] = useState(modeList[0]);
 
+  const onCameraChanged = () => {
+    if (!fakeClient) return;
+    fakeClient.getCameras()
+      .then((cameras) => {
+        setCameraList(cameras);
+        if (!selectedCamera) {
+          setSelectedCamera(cameras[0]);
+        }
+      })
+      .catch(() => {});
+  };
+
+  const onMicrophoneChanged = () => {
+    if (!fakeClient) return;
+    fakeClient.getRecordingDevices()
+      .then((microphones) => {
+        setMicrophoneList(microphones);
+        if (!selectedMicrophone) {
+          setSelectedMicrophone(microphones[0]);
+        }
+      })
+      .catch(() => {});
+  }
+
+  useEffect(() => {
+    if (fakeClient) {
+      const cameraUnsubscribe = fakeClient.addEventListener(AgoraEvents.CAMERA_CHANGED, onCameraChanged);
+      const micUnsubscribe = fakeClient.addEventListener(AgoraEvents.RECORDING_DEVICE_CHANGED, onMicrophoneChanged);
+
+      onCameraChanged();
+      onMicrophoneChanged();
+
+      return () => {
+        cameraUnsubscribe();
+        micUnsubscribe();
+      }
+    }
+  }, []);
 
   const isInputValid = () => {
     return true;
   }
-
-  const client = new AgoraClient();
 
   const onCancel = () => {
     props.setConfigInputVisible(false);
@@ -32,6 +70,10 @@ const ConfigInput = (props) => {
 
   const onSubmit = () => {
     props.setConfigInputVisible(false);
+    props.setLiveMode(selectedMode);
+    props.setCodec(selectedCodec);
+    props.setMicrophone(selectedMicrophone);
+    props.setCamera(selectedCamera);
   }
 
   const onCameraSelected = (camera) => {
@@ -52,13 +94,15 @@ const ConfigInput = (props) => {
 
   const getCameraItems = () => {
     return cameraList.map(camera => {
-      return <Dropdown.Item key={camera} onSelect={() => onCameraSelected(camera)}>{camera}</Dropdown.Item>;
+      return <Dropdown.Item key={camera.deviceId} onSelect={() => onCameraSelected(camera)}>{camera.label}</Dropdown.Item>;
     });
   };
 
   const getMicrophoneItems = () => {
     return mirophoneList.map(microphone => {
-      return <Dropdown.Item key={microphone} onSelect={() => onMicrophoneSelected(microphone)}>{microphone}</Dropdown.Item>
+      return <Dropdown.Item key={microphone.deviceId} onSelect={() => onMicrophoneSelected(microphone)}>
+        {microphone.label}
+      </Dropdown.Item>
     });
   }
 
@@ -70,7 +114,7 @@ const ConfigInput = (props) => {
 
   const getModeItems = () => {
     return modeList.map(mode => {
-      return <Dropdown.Item key={mode} onSelect={() => onCodecSelected(mode)}>{mode}</Dropdown.Item>
+      return <Dropdown.Item key={mode} onSelect={() => onModeSelected(mode)}>{mode}</Dropdown.Item>
     })
   }
 
@@ -80,6 +124,7 @@ const ConfigInput = (props) => {
         show={props.show}
         aria-labelledby={"contained-modal-title-vcenter"}
         centered
+        size={"lg"}
         onHide={onCancel}
       >
         <Modal.Header closeButton>
@@ -90,12 +135,12 @@ const ConfigInput = (props) => {
         <Modal.Body>
           <Container>
             <Row className={'config-input-row'}>
-              <Col xs={4}>
+              <Col xs={3}>
                 <span>Camera:</span>
               </Col>
-              <Col xs={8}>
+              <Col xs={9}>
                 <Dropdown size={"sm"}>
-                  <Dropdown.Toggle variant={"secondary"}>{selectedCamera}</Dropdown.Toggle>
+                  <Dropdown.Toggle variant={"secondary"}>{selectedCamera && selectedCamera.label}</Dropdown.Toggle>
                   <Dropdown.Menu>
                     {getCameraItems()}
                   </Dropdown.Menu>
@@ -103,12 +148,12 @@ const ConfigInput = (props) => {
               </Col>
             </Row>
             <Row className={'config-input-row'}>
-              <Col xs={4}>
+              <Col xs={3}>
                 <span>Microphone:</span>
               </Col>
-              <Col xs={8}>
+              <Col xs={9}>
                 <Dropdown size={"sm"}>
-                  <Dropdown.Toggle variant={"secondary"}>{selectedMicrophone}</Dropdown.Toggle>
+                  <Dropdown.Toggle variant={"secondary"}>{selectedMicrophone && selectedMicrophone.label}</Dropdown.Toggle>
                   <Dropdown.Menu>
                     {getMicrophoneItems()}
                   </Dropdown.Menu>
@@ -116,10 +161,10 @@ const ConfigInput = (props) => {
               </Col>
             </Row>
             <Row className={'config-input-row'}>
-              <Col xs={4}>
+              <Col xs={3}>
                 <span>Codec:</span>
               </Col>
-              <Col xs={8}>
+              <Col xs={9}>
                 <Dropdown size={"sm"}>
                   <Dropdown.Toggle variant={"secondary"}>{selectedCodec}</Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -129,10 +174,10 @@ const ConfigInput = (props) => {
               </Col>
             </Row>
             <Row className={'config-input-row'}>
-              <Col xs={4}>
+              <Col xs={3}>
                 <span>Mode:</span>
               </Col>
-              <Col xs={8}>
+              <Col xs={9}>
                 <Dropdown size={"sm"}>
                   <Dropdown.Toggle variant={"secondary"}>{selectedMode}</Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -161,5 +206,9 @@ export default connect(
     setApplicationId: authActions.setApplicationId,
     setChannel: authActions.setChannel,
     setUserId: authActions.setUserId,
+    setLiveMode: configActions.setLiveMode,
+    setCodec: configActions.setCodec,
+    setMicrophone: configActions.setMicrophone,
+    setCamera: configActions.setCamera,
   }
 )(ConfigInput);

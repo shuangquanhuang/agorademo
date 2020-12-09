@@ -4,6 +4,7 @@ import {actions as authActions} from './auth';
 import {actions as meetingStatusActions} from './meetingstatus';
 import {actions as clientActions} from './client';
 import {actions as errorActions} from './error';
+import {actions as configActions} from './config';
 
 export {
   createAction,
@@ -12,4 +13,5 @@ export {
   meetingStatusActions,
   clientActions,
   errorActions,
+  configActions,
 };

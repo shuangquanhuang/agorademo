@@ -61,6 +61,10 @@ const MeetingBoard = (props) => {
       applicationId,
       channel,
       userId,
+      codec,
+      mode,
+      camera,
+      microphone
     } = props;
 
     if (isEmpty(applicationId)) {
@@ -68,7 +72,13 @@ const MeetingBoard = (props) => {
     }
 
     const client = new AgoraClient();
-    client.createClient(AgoraConfigBuilder.defaultConfig());
+    const configBuilder = new AgoraConfigBuilder();
+    const config = configBuilder.setCodec(codec)
+      .setMode(mode)
+      .setMicrophoneId(microphone && microphone.deviceId)
+      .setCameraId(camera && camera.deviceId)
+      .build();
+    client.createClient(config);
 
     client.init(applicationId)
       .then(() => client.join({token, channel, userId}))
@@ -84,7 +94,7 @@ const MeetingBoard = (props) => {
     });
 
     props.setClient(client);
-  });
+  }, []);
 
   const getStreams = () => {
     const streams = [];
@@ -116,11 +126,16 @@ const MeetingBoard = (props) => {
 export default connect(
   state => {
     const {token, applicationId, channel} = typedSelector(state, STORE_TYPE.AUTH);
+    const {codec, mode, camera, microphone} = typedSelector(state, STORE_TYPE.CONFIG);
 
     return {
       applicationId,
       token,
       channel,
+      codec,
+      mode,
+      camera,
+      microphone
     };
   },
   {

@@ -4,6 +4,7 @@ const STORE_TYPE = {
   ENTRY_BOARD: 'entry_board',
   CLIENT: 'client',
   ERROR: 'error',
+  CONFIG: 'config',
 }
 
 export default STORE_TYPE;

@@ -44,6 +44,16 @@ class AgoraClient {
     await this._client.join(token, channel, userId);
   }
 
+  async getCameras() {
+    this.checkClient();
+    return this._client.getCameras();
+  }
+
+  async getRecordingDevices() {
+    this.checkClient();
+    return this._client.getRecordingDevices();
+  }
+
   getRandomStreamId() {
     const uid = this._userId || Math.floor(Math.random() * 10000);
     const now = Date.now();
