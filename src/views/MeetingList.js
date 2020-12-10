@@ -10,6 +10,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import './MeetingList.scss';
 import {authActions} from '../store/actions';
 import {ArrowLeftCircle} from 'react-bootstrap-icons';
+import momemt from 'moment';
 
 const MeetingList = (props) => {
   const history = useHistory();
@@ -38,7 +39,13 @@ const MeetingList = (props) => {
     {dataField: 'id', text: 'Meeting Id'},
     {dataField: 'channelName', text: 'Channel Name'},
     {dataField: 'description', text: 'Description'},
-    {dataField: 'createTime', text: 'Creation Time'},
+    {dataField: 'creationTime', text: 'Creation Time', formatter: (cellContent, row) => {
+      try {
+        return momemt(parseInt(cellContent)).format("DD-MM-YYYY HH:mm:ss");
+      } catch (e) {
+        return '';
+      }
+      }},
     {dataField: 'token', isDummyField: true, text: 'Join Meeting', formatter: (cellContent, row) => {
       return <Button variant='outline-primary' onClick={() => joinMeeting(row)}>Join</Button>
     }},

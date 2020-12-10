@@ -6,9 +6,10 @@ import classNames from 'classnames';
 import {authActions, entryBoardActions, errorActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
 import {STORE_TYPE} from '../store';
-import {TokenService} from '../service';
+import {TokenService, MeetingService} from '../service';
 
-const NewMeeingDialog = (props) => {
+
+const NewMeetingDialog = (props) => {
   const [channelName, setChannelName] = useState('');
 
   const isInputValid = () => {
@@ -33,6 +34,14 @@ const NewMeeingDialog = (props) => {
       certificate,
     }).then((token) => {
       props.setToken(token);
+      MeetingService.createMeeting({
+        applicationId,
+        channelName,
+        token,
+        creatorId: userId
+      }).then((meetingId) => {
+        console.log('meeting created', meetingId);
+      })
     }).catch(e => {
       props.setError(new Error((e && e.message) || "Error while creating meeting."));
     });
@@ -110,4 +119,4 @@ export default connect(
     setError: errorActions.setError,
     setToken: authActions.setToken,
   }
-)(NewMeeingDialog);
+)(NewMeetingDialog);

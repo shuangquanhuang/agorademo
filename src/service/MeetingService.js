@@ -1,42 +1,50 @@
 class MeetingService {
   fetchMeetingList() {
+    return fetch(process.env.REACT_APP_MEETING_ENDPOINT, {
+      method: 'GET',
+      headers:{
+        'Content-Type':'application/json;charset=UTF-8'
+      },
+      mode:'cors',
+      cache:'default',
+    })
+      .then(resp => resp.ok ? resp.json() : Promise.reject())
+      .then(resp => {
+        if (resp && resp['success']) {
+          return resp['data'];
+        } else {
+          return Promise.reject(resp['message']);
+        }
+      });
 
-    const meetingList = [
-      {
-        'id': 0,
-        'createTime': 0,
-        'channelName': 'f3232',
-        'description': 'fewcw',
-        'title': 'wfewfwe',
-        'token': 'token 1',
-      },
-      {
-        'id': 1,
-        'createTime': 1000,
-        'channelName': 'yrrb',
-        'description': 'gerger',
-        'title': 'wfewffwewe',
-        'token': 'token 2',
-      },
-      {
-        'id': 2,
-        'createTime': 5000,
-        'channelName': 'fe',
-        'description': 'htr',
-        'title': 'htr',
-        'token': 'token 3',
-      },
-      {
-        'id': 3,
-        'createTime': 9000,
-        'channelName': 'fwefwe',
-        'description': 'hgrth',
-        'title': 'hrthrt',
-        'token': 'token 4',
-      },
-    ];
+  }
 
-    return Promise.resolve(meetingList);
+  createMeeting({applicationId, channelName, token, creatorId}) {
+    const data = {
+      applicationId,
+      channelName,
+      token,
+      creatorId,
+    };
+
+    return fetch(process.env.REACT_APP_MEETING_ENDPOINT, {
+      method: 'POST',
+      headers:{
+        'Content-Type':'application/json;charset=UTF-8'
+      },
+      mode:'cors',
+      cache:'default',
+      body: JSON.stringify(data)
+    })
+      .then(resp => resp.ok ? resp.json() : Promise.reject())
+      .then(resp => {
+        if (resp && resp['success']) {
+          return resp['meetingId'];
+        } else {
+          return Promise.reject(resp['message']);
+        }
+      });
+
   }
 }
 

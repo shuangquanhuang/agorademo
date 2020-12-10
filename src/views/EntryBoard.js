@@ -8,7 +8,7 @@ import {STORE_TYPE} from '../store';
 import {connect} from 'react-redux';
 import './EntryBoard.scss';
 import {ROUTES} from '../constants';
-import NewMeeingDialog from './NewMeeingDialog';
+import NewMeetingDialog from './NewMeetingDialog';
 import { useHistory } from 'react-router-dom';
 
 
@@ -45,7 +45,7 @@ const EntryBoard = (props) => {
         </div>
 
         <JoinMeetingDialog show={props.showJoinMeetingDialog} onSubmit={onJoinMeeting}/>
-        <NewMeeingDialog show={props.showNewMeetingDialog} onSubmit={onNewMeeting}/>
+        <NewMeetingDialog show={props.showNewMeetingDialog} onSubmit={onNewMeeting}/>
         <ConfigInput show={props.showConfigInputDialog}/>
       </div>
     </Container>
