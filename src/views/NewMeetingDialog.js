@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import {authActions, entryBoardActions, messageActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
 import {STORE_TYPE} from '../store';
-import {TokenService, MeetingService} from '../service';
+import {MeetingService} from '../service';
 
 
 const NewMeetingDialog = (props) => {
@@ -25,21 +25,12 @@ const NewMeetingDialog = (props) => {
     props.setChannelName(channelName);
     props.setNewMeetingInputVisible(false);
 
-    const {applicationId, userId, certificate, expireTimeInSeconds} = props;
+    const {applicationId, userId} = props;
 
     try {
-      const token = await TokenService.createToken({
-        applicationId,
-        channelName,
-        userId,
-        expireTimeInSeconds,
-        certificate,
-      });
-      props.setToken(token);
       const meetingId = await MeetingService.createMeeting({
         applicationId,
         channelName,
-        token,
         creatorId: userId,
         description
       });
@@ -111,13 +102,11 @@ const NewMeetingDialog = (props) => {
 
 export default connect(
   state => {
-    const {applicationId, userId, expireTimeInSeconds, certificate} = typedSelector(state, STORE_TYPE.AUTH);
+    const {applicationId, userId} = typedSelector(state, STORE_TYPE.AUTH);
 
     return {
       applicationId,
       userId,
-      expireTimeInSeconds,
-      certificate,
     };
   },
   {

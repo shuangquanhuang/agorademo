@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {useHistory} from 'react-router';
 import {ROUTES} from '../constants';
-import {MeetingService} from '../service';
+import {MeetingService, TokenService} from '../service';
 import {Button} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -25,9 +25,8 @@ const MeetingList = (props) => {
 
   const joinMeeting = (row) => {
     const meeting = meetingList.find(item => item.id === row.id);
-    const {channelName, token} = meeting;
+    const {channelName} = meeting;
     props.setChannelName(channelName);
-    props.setToken(token);
     history.push(ROUTES.MEETING);
   }
 
