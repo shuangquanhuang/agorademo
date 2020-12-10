@@ -77,6 +77,10 @@ class AgoraClient {
     await this._client.leave();
   }
 
+  subscribe(stream, callback) {
+    this._client.subscribe(stream, callback);
+  }
+
   addEventListener(event, callback) {
     this._client.on(event, callback);
 
