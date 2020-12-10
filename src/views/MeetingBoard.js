@@ -92,6 +92,10 @@ const MeetingBoard = (props) => {
     });
 
     props.setClient(client);
+
+    return () => {
+      client.leave();
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getStreams = () => {

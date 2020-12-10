@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import {authActions, entryBoardActions, messageActions} from '../store/actions';
 import { typedSelector } from '../store/selectors';
 import { STORE_TYPE } from '../store';
-import {MeetingService} from '../service';
+import {MeetingService, TokenService} from '../service';
 import {ROUTES} from '../constants';
 import {useHistory} from 'react-router';
 
@@ -27,6 +27,9 @@ const JoinMeetingDialog = (props) => {
     const {
       applicationId,
       setChannelName,
+      certificate,
+      expireTimeInSeconds,
+      userId,
       setJointMeetingInputVisible,
       setError,
       setToken,
@@ -37,8 +40,15 @@ const JoinMeetingDialog = (props) => {
     setJointMeetingInputVisible(false);
     
     try {
-      const info = await MeetingService.queryMeeting({applicationId, channelName: actualChannelName});
-      setToken(info['token']);
+      const token = await TokenService.createToken({
+        applicationId,
+        expireTimeInSeconds,
+        certificate,
+        channelName:actualChannelName,
+        userId})
+      setToken(token);
+      // const info = await MeetingService.queryMeeting({applicationId, channelName: actualChannelName});
+      // setToken(info['token']);
       history.push(ROUTES.MEETING);
     } catch(e) {
       setError(e || 'Error while query meeting information');
@@ -101,6 +111,7 @@ export default connect(
     const {
       applicationId,
       userId,
+      expireTimeInSeconds,
       channelName,
       certificate,
     } = typedSelector(state, STORE_TYPE.AUTH);
@@ -110,6 +121,7 @@ export default connect(
       userId,
       channelName,
       certificate,
+      expireTimeInSeconds,
     };
   },
   {
