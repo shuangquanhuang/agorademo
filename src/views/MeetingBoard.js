@@ -120,7 +120,7 @@ const MeetingBoard = (props) => {
           .setCameraId(camera && camera.deviceId)
           .build();
         client.createClient(config);
-        
+
         await client.init(applicationId)
         await client.join({token, channelName, userId})
 
@@ -182,7 +182,7 @@ const MeetingBoard = (props) => {
       const streamId = stream.getId();
       streams.push(
         <div className={'meeting-stream'} key={streamId}>
-          <StreamPlayer stream={stream} label={streamId} key={streamId} video={true} audio={true} />
+          <StreamPlayer stream={stream} label={'User-' + streamId} key={streamId} video={true} audio={true} />
         </div>
       )
     })
