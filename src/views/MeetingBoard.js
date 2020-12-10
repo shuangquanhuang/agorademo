@@ -6,7 +6,6 @@ import {errorActions, clientActions, meetingStatusActions} from '../store/action
 import {typedSelector} from '../store/selectors';
 import {AgoraEvents} from '../agora';
 import {isEmpty} from 'loadsh';
-// import {Container, Row} from 'react-bootstrap';
 import './MeetingBoard.scss';
 
 const MeetingBoard = (props) => {
@@ -66,7 +65,7 @@ const MeetingBoard = (props) => {
       microphone
     } = props;
 
-    if (isEmpty(applicationId)) {
+    if (isEmpty(applicationId) || true) {
       return;
     }
 

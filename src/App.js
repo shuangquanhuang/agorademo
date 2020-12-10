@@ -5,10 +5,19 @@ import {typedSelector} from './store/selectors';
 import EntryBoard from './views/EntryBoard';
 import MeetingBoard from './views/MeetingBoard';
 import ErrorCard from './views/ErrorCard';
+import MeetingList from './views/MeetingList';
 import {connect} from 'react-redux';
 import {clientActions, authActions, configActions} from './store/actions';
 import { v4 as uuidv4 } from 'uuid';
 import { MODE, CODEC } from './agora';
+import {ROUTES} from './constants/RouteConstants';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+
+
 
 function App(props) {
   useEffect(() => {
@@ -21,13 +30,26 @@ function App(props) {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <h1> Agora Meeting Demo</h1>
-      </header>
-      {props.meetingStarted ? <MeetingBoard/> : <EntryBoard/>}
-      {props.error && <ErrorCard/>}
-    </div>
+    <Router>
+      <div className='App'>
+        <header className='App-header'>
+          <h1> Agora Meeting Demo</h1>
+        </header>
+        <Switch>
+          <Route exact path={ROUTES.ROOT}>
+            <EntryBoard/>
+          </Route>
+          <Route path={ROUTES.MEETING}>
+            <MeetingBoard/>
+          </Route>
+          <Route path={ROUTES.MEETING_LIST}>
+            <MeetingList/>
+          </Route>
+        </Switch>
+        {props.error && <ErrorCard/>}
+      </div>
+
+    </Router>
   );
 }
 

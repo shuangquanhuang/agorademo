@@ -7,17 +7,25 @@ import {typedSelector} from '../store/selectors';
 import {STORE_TYPE} from '../store';
 import {connect} from 'react-redux';
 import './EntryBoard.scss';
+import {ROUTES} from '../constants';
 import NewMeeingDialog from './NewMeeingDialog';
+import { useHistory } from 'react-router-dom';
 
 
 const EntryBoard = (props) => {
 
+  const history = useHistory();
+
   const onJoinMeeting = () => {
-    props.setMeetingStarted(true);
+    history.push(ROUTES.MEETING);
   }
 
   const onNewMeeting = () => {
-    
+
+  }
+
+  const navigateToMeetingList = () => {
+    history.push(ROUTES.MEETING_LIST)
   }
 
   return (
@@ -30,8 +38,12 @@ const EntryBoard = (props) => {
           <Button variant='outline-success' onClick={() => props.setJointMeetingInputVisible(true)}>Join Meeting</Button>
         </div>
         <div className={'config-meeting'}>
-          <Button variant='outline-info' onClick={() => props.setConfigInputVisible(true)}>Config Meeting</Button>
+          <Button variant='outline-info' onClick={navigateToMeetingList}>Meeting List</Button>
         </div>
+        <div className={'config-meeting'}>
+          <Button variant='outline-warning' onClick={() => props.setConfigInputVisible(true)}>Config Meeting</Button>
+        </div>
+
         <JoinMeetingDialog show={props.showJoinMeetingDialog} onSubmit={onJoinMeeting}/>
         <NewMeeingDialog show={props.showNewMeetingDialog} onSubmit={onNewMeeting}/>
         <ConfigInput show={props.showConfigInputDialog}/>
@@ -51,6 +63,6 @@ export default connect(
     setNewMeetingInputVisible: entryBoardActions.setNewMeetingInputVisible,
     setConfigInputVisible: entryBoardActions.setConfigInputVisible,
     setMeetingStarted: meetingStatusActions.setMeetingStarted,
-    setError: errorActions.setError,    
+    setError: errorActions.setError,
   }
 )(EntryBoard);
