@@ -36,10 +36,10 @@ class AgoraClient {
     await this._client.init(applicationId);
   }
 
-  async join({token, channel, userId}) {
+  async join({token, channelName, userId}) {
     this.checkClient();
     this._userId = userId;
-    await this._client.join(token, channel, userId);
+    await this._client.join(token, channelName, userId);
   }
 
   async getCameras() {

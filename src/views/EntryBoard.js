@@ -2,27 +2,18 @@ import React from 'react';
 import {Button, Container} from 'react-bootstrap';
 import ConfigInput from './ConfigInput';
 import JoinMeetingDialog from './JoinMeetingDialog';
-import {entryBoardActions, errorActions, meetingStatusActions} from '../store/actions';
+import {entryBoardActions, messageActions, meetingStatusActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
 import {STORE_TYPE} from '../store';
 import {connect} from 'react-redux';
 import './EntryBoard.scss';
 import {ROUTES} from '../constants';
 import NewMeetingDialog from './NewMeetingDialog';
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router';
 
 
 const EntryBoard = (props) => {
-
   const history = useHistory();
-
-  const onJoinMeeting = () => {
-    history.push(ROUTES.MEETING);
-  }
-
-  const onNewMeeting = () => {
-
-  }
 
   const navigateToMeetingList = () => {
     history.push(ROUTES.MEETING_LIST)
@@ -44,8 +35,8 @@ const EntryBoard = (props) => {
           <Button variant='outline-warning' onClick={() => props.setConfigInputVisible(true)}>Config Meeting</Button>
         </div>
 
-        <JoinMeetingDialog show={props.showJoinMeetingDialog} onSubmit={onJoinMeeting}/>
-        <NewMeetingDialog show={props.showNewMeetingDialog} onSubmit={onNewMeeting}/>
+        <JoinMeetingDialog show={props.showJoinMeetingDialog}/>
+        <NewMeetingDialog show={props.showNewMeetingDialog}/>
         <ConfigInput show={props.showConfigInputDialog}/>
       </div>
     </Container>
@@ -63,6 +54,6 @@ export default connect(
     setNewMeetingInputVisible: entryBoardActions.setNewMeetingInputVisible,
     setConfigInputVisible: entryBoardActions.setConfigInputVisible,
     setMeetingStarted: meetingStatusActions.setMeetingStarted,
-    setError: errorActions.setError,
+    setError: messageActions.setError,
   }
 )(EntryBoard);

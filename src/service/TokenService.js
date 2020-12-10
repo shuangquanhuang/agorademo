@@ -1,5 +1,5 @@
 class TokenService {
-  createToken({applicationId, expireTimeInSeconds, certificate, channelName, userId}) {
+  async createToken({applicationId, expireTimeInSeconds, certificate, channelName, userId}) {
     const data = {
       applicationId,
       expireTimeInSeconds,
@@ -8,23 +8,22 @@ class TokenService {
       uid: userId,
     }
 
-    return fetch(process.env.REACT_APP_TOKEN_ENDPOINT, {
-      method: 'POST',
-      headers:{
-        'Content-Type':'application/json;charset=UTF-8'
-      },
-      mode:'cors',
-      cache:'default',
-      body: JSON.stringify(data)
-    })
-      .then(resp => resp.ok ? resp.json() : Promise.reject())
-      .then(resp => {
-        if (resp && resp['ok']) {
-          return resp['token'];
-        } else {
-          return Promise.reject(resp['message']);
-        }
+    const resp = await fetch(process.env.REACT_APP_TOKEN_ENDPOINT, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
+          },
+          mode: 'cors',
+          cache: 'default',
+          body: JSON.stringify(data)
       });
+      
+      const respJson = await (resp.ok ? resp.json() : Promise.reject());
+      if (respJson && respJson['success']) {
+          return respJson['token'];
+      } else {
+        return Promise.reject(respJson['message']);
+    }
   }
 }
 

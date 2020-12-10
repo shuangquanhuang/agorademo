@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import React, { useState } from 'react';
 import  {isEmpty} from 'loadsh';
 import classNames from 'classnames';
-import {authActions, entryBoardActions, errorActions} from '../store/actions';
+import {authActions, entryBoardActions, messageActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
 import {STORE_TYPE} from '../store';
 import {TokenService, MeetingService} from '../service';
@@ -11,6 +11,7 @@ import {TokenService, MeetingService} from '../service';
 
 const NewMeetingDialog = (props) => {
   const [channelName, setChannelName] = useState('');
+  const [description, setDescription] = useState('');
 
   const isInputValid = () => {
     return !isEmpty(channelName);
@@ -20,32 +21,32 @@ const NewMeetingDialog = (props) => {
     props.setNewMeetingInputVisible(false);
   }
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     props.setChannelName(channelName);
     props.setNewMeetingInputVisible(false);
 
     const {applicationId, userId, certificate, expireTimeInSeconds} = props;
 
-    TokenService.createToken({
-      applicationId,
-      channelName,
-      userId,
-      expireTimeInSeconds,
-      certificate,
-    }).then((token) => {
+    try {
+      const token = await TokenService.createToken({
+        applicationId,
+        channelName,
+        userId,
+        expireTimeInSeconds,
+        certificate,
+      });
       props.setToken(token);
-      MeetingService.createMeeting({
+      const meetingId = await MeetingService.createMeeting({
         applicationId,
         channelName,
         token,
-        creatorId: userId
-      }).then((meetingId) => {
-        console.log('meeting created', meetingId);
-      })
-    }).catch(e => {
-      props.setError(new Error((e && e.message) || "Error while creating meeting."));
-    });
-    props.onSubmit();
+        creatorId: userId,
+        description
+      });
+      props.setMessage('Meeting created, you can find it in meeting list');
+    } catch(e) {
+      props.setError(e || "Error while creating meeting.");
+    }
   }
 
   return (
@@ -88,6 +89,14 @@ const NewMeetingDialog = (props) => {
                 <input placeholder={'Channel Name'} value={channelName} onChange={(event) => setChannelName(event.target.value)}/>
               </Col>
             </Row>
+            <Row>
+              <Col xs={4}>
+                <span>Description:</span>
+              </Col>
+              <Col xs={8}>
+                <input placeholder={'Description'} value={description} onChange={(event) => setDescription(event.target.value)}/>
+              </Col>
+            </Row>
           </Container>
 
         </Modal.Body>
@@ -116,7 +125,8 @@ export default connect(
     setApplicationId: authActions.setApplicationId,
     setChannelName: authActions.setChannelName,
     setUserId: authActions.setUserId,
-    setError: errorActions.setError,
+    setError: messageActions.setError,
+    setMessage: messageActions.setMessage,
     setToken: authActions.setToken,
   }
 )(NewMeetingDialog);

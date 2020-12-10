@@ -3,33 +3,46 @@ import {connect} from 'react-redux';
 import React, { useState } from 'react';
 import  {isEmpty} from 'loadsh';
 import classNames from 'classnames';
-import {authActions, entryBoardActions} from '../store/actions';
+import {authActions, entryBoardActions, messageActions} from '../store/actions';
 import { typedSelector } from '../store/selectors';
 import { STORE_TYPE } from '../store';
-
+import {MeetingService} from '../service';
+import {ROUTES} from '../constants';
+import {useHistory} from 'react-router';
 
 const JoinMeetingDialog = (props) => {
-  // TODO: remove default
+  const history = useHistory();
+
   const [channelName, setChannelName] = useState(props.channelName || '');
-  const [token, setToken] = useState(props.token || '');
 
   const isInputValid = () => {
-    const channelNameValid = !isEmpty(channelName) || !isEmpty(props.channelName);
-    const tokenValid = !isEmpty(token) || !isEmpty(props.token);
-
-    return channelNameValid && tokenValid;
+    return !isEmpty(channelName) || !isEmpty(props.channelName);
   }
 
   const onCancel = () => {
     props.setJointMeetingInputVisible(false);
   }
 
-  const onSubmit = () => {
-    props.setChannelName(channelName || props.channelName);
-    props.setToken(token || props.token);
-    props.setJointMeetingInputVisible(false);
+  const onSubmit = async () => {
+    const {
+      applicationId,
+      setChannelName,
+      setJointMeetingInputVisible,
+      setError,
+      setToken,
+    } = props;
 
-    props.onSubmit();
+    const actualChannelName = channelName || props.channelName
+    setChannelName(actualChannelName);
+    setJointMeetingInputVisible(false);
+    
+    try {
+      const info = await MeetingService.queryMeeting({applicationId, channelName: actualChannelName});
+      setToken(info['token']);
+      history.push(ROUTES.MEETING);
+    } catch(e) {
+      setError(e || 'Error while query meeting information');
+    }
   }
 
   return (
@@ -71,14 +84,6 @@ const JoinMeetingDialog = (props) => {
                 <input placeholder={'Channel Name'} value={channelName || props.channelName || ''} onChange={(event) => setChannelName(event.target.value)}/>
               </Col>
             </Row>
-            <Row>
-              <Col xs={4}>
-                <span>Token:</span>
-              </Col>
-              <Col xs={8}>
-                <input placeholder={'Token'} value={token || props.token || ''} onChange={(event) => setToken(event.target.value)}/>
-              </Col>
-            </Row>
           </Container>
 
         </Modal.Body>
@@ -97,7 +102,6 @@ export default connect(
       applicationId,
       userId,
       channelName,
-      token,
       certificate,
     } = typedSelector(state, STORE_TYPE.AUTH);
 
@@ -105,15 +109,15 @@ export default connect(
       applicationId,
       userId,
       channelName,
-      token,
       certificate,
     };
   },
   {
     setJointMeetingInputVisible: entryBoardActions.setJointMeetingInputVisible,
-    setToken: authActions.setToken,
     setApplicationId: authActions.setApplicationId,
     setChannelName: authActions.setChannelName,
     setUserId: authActions.setUserId,
+    setError: messageActions.setError,
+    setToken: authActions.setToken,
   }
 )(JoinMeetingDialog);

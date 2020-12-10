@@ -3,7 +3,7 @@ const STORE_TYPE = {
   MEETING_STATUE: 'meeting_status',
   ENTRY_BOARD: 'entry_board',
   CLIENT: 'client',
-  ERROR: 'error',
+  MESSAGE: 'message',
   CONFIG: 'config',
 }
 

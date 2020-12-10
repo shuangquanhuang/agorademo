@@ -4,22 +4,47 @@ import {STORE_TYPE} from './store';
 import {typedSelector} from './store/selectors';
 import EntryBoard from './views/EntryBoard';
 import MeetingBoard from './views/MeetingBoard';
-import ErrorCard from './views/ErrorCard';
+import MessageCard from './views/MessageCard';
 import MeetingList from './views/MeetingList';
 import {connect} from 'react-redux';
 import {clientActions, authActions, configActions} from './store/actions';
 import { v4 as uuidv4 } from 'uuid';
-import { MODE, CODEC } from './agora';
 import {ROUTES} from './constants/RouteConstants';
+import {AgoraClient, AgoraConfigBuilder, AgoraEvents, CODEC, MODE} from './agora';
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
 
-
+const fakeClient = new AgoraClient().createClient(AgoraConfigBuilder.defaultConfig());
 
 function App(props) {
+
+  const onCameraChanged = () => {
+    if (!fakeClient) return;
+    fakeClient.getCameras()
+      .then((cameras) => {
+        props.setCameraList(cameras);
+        if (!props.camera) {
+          props.setCamera(cameras[0]);
+        }
+      })
+      .catch(() => {});
+  };
+
+  const onMicrophoneChanged = () => {
+    if (!fakeClient) return;
+    fakeClient.getRecordingDevices()
+      .then((microphones) => {
+        props.setMicrophoneList(microphones);
+        if (!props.microphone) {
+          props.setMicrophone(microphones[0]);
+        }
+      })
+      .catch(() => {});
+  }
+
   useEffect(() => {
     props.setUserId(uuidv4());
     props.setCodec(Object.values(CODEC)[0]);
@@ -27,6 +52,20 @@ function App(props) {
     props.setApplicationId(process.env.REACT_APP_APPLICATION_ID);
     props.setCertificate(process.env.REACT_APP_CERTIFICATE);
     props.setExpireTimeInSeconds(parseInt(process.env.REACT_APP_TOKEN_EXPIRE_TIME_IN_SECONDS));
+
+    if (fakeClient) {
+      const cameraUnsubscribe = fakeClient.addEventListener(AgoraEvents.CAMERA_CHANGED, onCameraChanged);
+      const micUnsubscribe = fakeClient.addEventListener(AgoraEvents.RECORDING_DEVICE_CHANGED, onMicrophoneChanged);
+
+      onCameraChanged();
+      onMicrophoneChanged();
+
+      return () => {
+        cameraUnsubscribe();
+        micUnsubscribe();
+      }
+    }
+    // depends on [] so that useEffect only execute/clean once.
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -46,7 +85,7 @@ function App(props) {
             <MeetingList/>
           </Route>
         </Switch>
-        {props.error && <ErrorCard/>}
+        {props.shouldShowMessageCard && <MessageCard/>}
       </div>
 
     </Router>
@@ -56,11 +95,14 @@ function App(props) {
 export default connect(
   state => {
     const {started: meetingStarted} = typedSelector(state, STORE_TYPE.MEETING_STATUE);
-    const {error} = typedSelector(state, STORE_TYPE.ERROR);
-
+    const {error, message} = typedSelector(state, STORE_TYPE.MESSAGE);
+    const {camera, microphone} = typedSelector(state, STORE_TYPE.CONFIG);
+    const shouldShowMessageCard = Boolean(error || message);
     return {
+      camera,
+      microphone,
       meetingStarted,
-      error,
+      shouldShowMessageCard,
     };
   },
   {
@@ -71,5 +113,9 @@ export default connect(
     setApplicationId: authActions.setApplicationId,
     setCodec: configActions.setCodec,
     setLiveMode: configActions.setLiveMode,
+    setMicrophoneList: configActions.setMicrophoneList,
+    setCameraList: configActions.setCameraList,
+    setMicrophone: configActions.setMicrophone,
+    setCamera: configActions.setCamera,
   }
 )(App);

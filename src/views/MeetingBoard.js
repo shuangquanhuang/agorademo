@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {StreamPlayer, AgoraClient, AgoraConfigBuilder} from '../agora';
 import {STORE_TYPE} from '../store';
-import {errorActions, clientActions, meetingStatusActions} from '../store/actions';
+import {messageActions, clientActions, meetingStatusActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
 import {AgoraEvents} from '../agora';
 import {isEmpty} from 'loadsh';
@@ -65,7 +65,7 @@ const MeetingBoard = (props) => {
       microphone
     } = props;
 
-    if (isEmpty(applicationId) || true) {
+    if (isEmpty(applicationId)) {
       return;
     }
 
@@ -87,7 +87,7 @@ const MeetingBoard = (props) => {
       })
       .then(() => client.startStream({audio: true, video: true}))
       .catch(e => {
-        props.setError(e);
+        props.setError(e || 'Error while init agora client');
         props.setMeetingStarted(false);
     });
 
@@ -139,7 +139,7 @@ export default connect(
   },
   {
     setClient: clientActions.setClient,
-    setError: errorActions.setError,
+    setError: messageActions.setError,
     setMeetingStarted: meetingStatusActions.setMeetingStarted,
   }
 )(MeetingBoard);

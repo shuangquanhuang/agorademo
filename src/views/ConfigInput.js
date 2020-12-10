@@ -1,64 +1,30 @@
 import {connect} from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import {Modal, Button, Container, Row, Col, Dropdown} from 'react-bootstrap';
-import {AgoraClient, AgoraConfigBuilder, AgoraEvents, CODEC, MODE} from '../agora';
 import {authActions, configActions, entryBoardActions} from '../store/actions';
 import './ConfigInput.scss';
-
-const fakeClient = new AgoraClient().createClient(AgoraConfigBuilder.defaultConfig());
+import { typedSelector } from '../store/selectors';
+import { STORE_TYPE } from '../store';
+import {CODEC, MODE} from '../agora';
 
 
 const ConfigInput = (props) => {
-
-
-  const [cameraList, setCameraList] = useState([]);
   const [selectedCamera, setSelectedCamera] = useState(null);
-  const [microphoneList, setMicrophoneList] = useState([]);
   const [selectedMicrophone, setSelectedMicrophone] = useState(null);
   const [codecList, ] = useState([...Object.values(CODEC)]);
   const [selectedCodec, setSelectedCodec] = useState(codecList[0]);
   const [modeList, ] = useState([...Object.values(MODE)]);
   const [selectedMode, setSelectedMode] = useState(modeList[0]);
-
-  const onCameraChanged = () => {
-    if (!fakeClient) return;
-    fakeClient.getCameras()
-      .then((cameras) => {
-        setCameraList(cameras);
-        if (!selectedCamera) {
-          setSelectedCamera(cameras[0]);
-        }
-      })
-      .catch(() => {});
-  };
-
-  const onMicrophoneChanged = () => {
-    if (!fakeClient) return;
-    fakeClient.getRecordingDevices()
-      .then((microphones) => {
-        setMicrophoneList(microphones);
-        if (!selectedMicrophone) {
-          setSelectedMicrophone(microphones[0]);
-        }
-      })
-      .catch(() => {});
-  }
+  
 
   useEffect(() => {
-    if (fakeClient) {
-      const cameraUnsubscribe = fakeClient.addEventListener(AgoraEvents.CAMERA_CHANGED, onCameraChanged);
-      const micUnsubscribe = fakeClient.addEventListener(AgoraEvents.RECORDING_DEVICE_CHANGED, onMicrophoneChanged);
-
-      onCameraChanged();
-      onMicrophoneChanged();
-
-      return () => {
-        cameraUnsubscribe();
-        micUnsubscribe();
-      }
+    if (!selectedCamera) {
+      setSelectedCamera(props.camera);
     }
-    // depends on [] so that useEffect only execute/clean once.
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!selectedMicrophone) {
+      setSelectedMicrophone(props.microphone);
+    }
+  }, [props]);
 
   const onCancel = () => {
     props.setConfigInputVisible(false);
@@ -89,13 +55,15 @@ const ConfigInput = (props) => {
   }
 
   const getCameraItems = () => {
-    return cameraList.map(camera => {
-      return <Dropdown.Item key={camera.deviceId} onSelect={() => onCameraSelected(camera)}>{camera.label}</Dropdown.Item>;
+    return props.cameraList.map(camera => {
+      return <Dropdown.Item key={camera.deviceId} onSelect={() => onCameraSelected(camera)}>
+        {camera.label}
+      </Dropdown.Item>;
     });
   };
 
   const getMicrophoneItems = () => {
-    return microphoneList.map(microphone => {
+    return props.microphoneList.map(microphone => {
       return <Dropdown.Item key={microphone.deviceId} onSelect={() => onMicrophoneSelected(microphone)}>
         {microphone.label}
       </Dropdown.Item>
@@ -195,7 +163,16 @@ const ConfigInput = (props) => {
 }
 
 export default connect(
-  null,
+  state => {
+    const {cameraList, microphoneList, camera, microphone} = typedSelector(state, STORE_TYPE.CONFIG);
+
+    return {
+      camera,
+      microphone,
+      cameraList,
+      microphoneList,
+    }
+  },
   {
     setConfigInputVisible: entryBoardActions.setConfigInputVisible,
     setToken: authActions.setToken,

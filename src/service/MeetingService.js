@@ -1,50 +1,89 @@
 class MeetingService {
-  fetchMeetingList() {
-    return fetch(process.env.REACT_APP_MEETING_ENDPOINT, {
+  async fetchMeetingList() {
+    const resp = await fetch(process.env.REACT_APP_MEETING_ENDPOINT, {
       method: 'GET',
-      headers:{
-        'Content-Type':'application/json;charset=UTF-8'
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
       },
-      mode:'cors',
-      cache:'default',
-    })
-      .then(resp => resp.ok ? resp.json() : Promise.reject())
-      .then(resp => {
-        if (resp && resp['success']) {
-          return resp['data'];
-        } else {
-          return Promise.reject(resp['message']);
-        }
-      });
+      mode: 'cors',
+      cache: 'default',
+    });
+
+    const respJson = await (resp.ok ? resp.json() : Promise.reject());
+    if (respJson && respJson['success']) {
+      return respJson['data'];
+    } else {
+      return Promise.reject(respJson['message']);
+    }
 
   }
 
-  createMeeting({applicationId, channelName, token, creatorId}) {
+  async createMeeting({applicationId, channelName, token, creatorId, description}) {
     const data = {
       applicationId,
       channelName,
       token,
       creatorId,
+      description
     };
 
-    return fetch(process.env.REACT_APP_MEETING_ENDPOINT, {
+    const resp = await fetch(process.env.REACT_APP_MEETING_ENDPOINT, {
       method: 'POST',
-      headers:{
-        'Content-Type':'application/json;charset=UTF-8'
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
       },
-      mode:'cors',
-      cache:'default',
+      mode: 'cors',
+      cache: 'default',
       body: JSON.stringify(data)
-    })
-      .then(resp => resp.ok ? resp.json() : Promise.reject())
-      .then(resp => {
-        if (resp && resp['success']) {
-          return resp['meetingId'];
-        } else {
-          return Promise.reject(resp['message']);
-        }
-      });
+    });
 
+    const respJson = await (resp.ok ? resp.json() : Promise.reject());
+    if (respJson && respJson['success']) {
+      return respJson['meetingId'];
+    } else {
+      return Promise.reject(respJson['message']);
+    }
+
+  }
+
+  async queryMeeting({applicationId, channelName}) {
+    const data = {
+      applicationId,
+      channelName,
+    };
+
+    const resp = await fetch(process.env.REACT_APP_MEETING_ENDPOINT + '/queryMeeting', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+      mode: 'cors',
+      cache: 'default',
+      body: JSON.stringify(data)
+    });
+
+    const respJson = await (resp.ok ? resp.json() : Promise.reject());
+    if (respJson && respJson['success']) {
+      return respJson['data'];
+    } else {
+      return Promise.reject(respJson['message']);
+    }
+  }
+
+  async queryMeetingById(meetingId) {
+    const resp = await fetch(process.env.REACT_APP_MEETING_ENDPOINT + '/' + meetingId, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'default',
+    });
+
+    const respJson = await (resp.ok ? resp.json() : Promise.reject());
+    if (respJson && respJson['success']) {
+      return respJson['data'];
+    } else {
+      return Promise.reject(respJson['message']);
+    }
+    
   }
 }
 
