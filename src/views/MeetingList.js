@@ -9,6 +9,7 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import './MeetingList.scss';
 import {authActions} from '../store/actions';
+import {ArrowLeftCircle} from 'react-bootstrap-icons';
 
 const MeetingList = (props) => {
   const history = useHistory();
@@ -29,19 +30,33 @@ const MeetingList = (props) => {
     history.push(ROUTES.MEETING);
   }
 
+  const backToHome = () => {
+    history.push(ROUTES.ROOT);
+  }
+
   const columns = [
     {dataField: 'id', text: 'Meeting Id'},
     {dataField: 'channelName', text: 'Channel Name'},
     {dataField: 'description', text: 'Description'},
     {dataField: 'createTime', text: 'Creation Time'},
     {dataField: 'token', isDummyField: true, text: 'Join Meeting', formatter: (cellContent, row) => {
-      return <Button variant="outline-primary" onClick={() => joinMeeting(row)}>Join</Button>
+      return <Button variant='outline-primary' onClick={() => joinMeeting(row)}>Join</Button>
     }},
   ]
 
   return(
     <div className={'meeting-list'}>
-      <BootstrapTable caption="Meeting List" keyField='id' data={ meetingList } columns={ columns } pagination={ paginationFactory() } />
+      <div className={'title'}>
+        <div className={'left'}>
+          <span>Meeting List</span>
+        </div>
+        <div className={'right'}>
+          <Button variant={'light'} onClick={() => backToHome()}>
+            <ArrowLeftCircle color={'royalblue'} size={25}/>
+          </Button>
+        </div>
+      </div>
+      <BootstrapTable caption='Meeting List' keyField='id' data={ meetingList } columns={ columns } pagination={ paginationFactory() } />
     </div>
   );
 }
