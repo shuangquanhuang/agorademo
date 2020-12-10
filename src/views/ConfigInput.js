@@ -44,7 +44,6 @@ const ConfigInput = (props) => {
       .catch(() => {});
   }
 
-  // depends on [] so that useEffect will be executed/clean only once
   useEffect(() => {
     if (fakeClient) {
       const cameraUnsubscribe = fakeClient.addEventListener(AgoraEvents.CAMERA_CHANGED, onCameraChanged);
@@ -58,7 +57,8 @@ const ConfigInput = (props) => {
         micUnsubscribe();
       }
     }
-  }, []);
+    // depends on [] so that useEffect only execute/clean once.
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onCancel = () => {
     props.setConfigInputVisible(false);
@@ -200,7 +200,6 @@ export default connect(
     setConfigInputVisible: entryBoardActions.setConfigInputVisible,
     setToken: authActions.setToken,
     setApplicationId: authActions.setApplicationId,
-    setChannel: authActions.setChannel,
     setUserId: authActions.setUserId,
     setLiveMode: configActions.setLiveMode,
     setCodec: configActions.setCodec,

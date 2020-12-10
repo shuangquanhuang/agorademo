@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import {authActions, entryBoardActions, errorActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
 import {STORE_TYPE} from '../store';
-import {createToken} from '../service/TokenService';
+import {TokenService} from '../service';
 
 const NewMeeingDialog = (props) => {
   const [channelName, setChannelName] = useState('');
@@ -20,15 +20,17 @@ const NewMeeingDialog = (props) => {
   }
 
   const onSubmit = () => {
-    props.setChannel(channelName);
+    props.setChannelName(channelName);
     props.setNewMeetingInputVisible(false);
 
-    const {applicationId, userId} = props;
+    const {applicationId, userId, certificate, expireTimeInSeconds} = props;
 
-    createToken({
+    TokenService.createToken({
       applicationId,
       channelName,
-      userId
+      userId,
+      expireTimeInSeconds,
+      certificate,
     }).then((token) => {
       props.setToken(token);
     }).catch(e => {
@@ -39,7 +41,7 @@ const NewMeeingDialog = (props) => {
 
   return (
     <div>
-      
+
       <Modal
         show={props.show}
         aria-labelledby={'contained-modal-title-vcenter'}
@@ -91,17 +93,19 @@ const NewMeeingDialog = (props) => {
 
 export default connect(
   state => {
-    const {applicationId, userId} = typedSelector(state, STORE_TYPE.AUTH);
+    const {applicationId, userId, expireTimeInSeconds, certificate} = typedSelector(state, STORE_TYPE.AUTH);
 
     return {
       applicationId,
       userId,
+      expireTimeInSeconds,
+      certificate,
     };
   },
   {
     setNewMeetingInputVisible: entryBoardActions.setNewMeetingInputVisible,
     setApplicationId: authActions.setApplicationId,
-    setChannel: authActions.setChannel,
+    setChannelName: authActions.setChannelName,
     setUserId: authActions.setUserId,
     setError: errorActions.setError,
     setToken: authActions.setToken,

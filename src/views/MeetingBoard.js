@@ -58,7 +58,7 @@ const MeetingBoard = (props) => {
     const {
       token,
       applicationId,
-      channel,
+      channelName,
       userId,
       codec,
       mode,
@@ -80,7 +80,7 @@ const MeetingBoard = (props) => {
     client.createClient(config);
 
     client.init(applicationId)
-      .then(() => client.join({token, channel, userId}))
+      .then(() => client.join({token, channelName, userId}))
       .then(() => {
         client.addEventListener(AgoraEvents.STREAM_PUBLISHD, onStreamPublished);
         client.addEventListener(AgoraEvents.STREAM_ADDED, onRemoteStreamAdded);
@@ -93,7 +93,7 @@ const MeetingBoard = (props) => {
     });
 
     props.setClient(client);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getStreams = () => {
     const streams = [];
@@ -124,14 +124,14 @@ const MeetingBoard = (props) => {
 
 export default connect(
   state => {
-    const {token, applicationId, channel, userId} = typedSelector(state, STORE_TYPE.AUTH);
+    const {token, applicationId, channelName, userId} = typedSelector(state, STORE_TYPE.AUTH);
     const {codec, mode, camera, microphone} = typedSelector(state, STORE_TYPE.CONFIG);
 
     return {
       applicationId,
       token,
       userId,
-      channel,
+      channelName,
       codec,
       mode,
       camera,

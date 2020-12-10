@@ -16,7 +16,7 @@ const JoinMeetingDialog = (props) => {
   const isInputValid = () => {
     const channelNameValid = !isEmpty(channelName) || !isEmpty(props.channelName);
     const tokenValid = !isEmpty(token) || !isEmpty(props.token);
-    
+
     return channelNameValid && tokenValid;
   }
 
@@ -25,7 +25,7 @@ const JoinMeetingDialog = (props) => {
   }
 
   const onSubmit = () => {
-    props.setChannel(channelName || props.channelName);
+    props.setChannelName(channelName || props.channelName);
     props.setToken(token || props.token);
     props.setJointMeetingInputVisible(false);
 
@@ -52,7 +52,7 @@ const JoinMeetingDialog = (props) => {
                 <span>Application ID:</span>
               </Col>
               <Col xs={8}>
-                <input placeholder={'Application ID'} value={props.applicationId} disabled/>
+                <input placeholder={'Application ID'} value={props.applicationId || ''} disabled/>
               </Col>
             </Row>
             <Row>
@@ -60,7 +60,7 @@ const JoinMeetingDialog = (props) => {
                 <span>User ID:</span>
               </Col>
               <Col xs={8}>
-                <input placeholder={'User ID'} value={props.userId} disabled/>
+                <input placeholder={'User ID'} value={props.userId || ''} disabled/>
               </Col>
             </Row>
             <Row>
@@ -68,7 +68,7 @@ const JoinMeetingDialog = (props) => {
                 <span>Channel Name:</span>
               </Col>
               <Col xs={8}>
-                <input placeholder={'Channel Name'} value={channelName || props.channelName} onChange={(event) => setChannelName(event.target.value)}/>
+                <input placeholder={'Channel Name'} value={channelName || props.channelName || ''} onChange={(event) => setChannelName(event.target.value)}/>
               </Col>
             </Row>
             <Row>
@@ -76,7 +76,7 @@ const JoinMeetingDialog = (props) => {
                 <span>Token:</span>
               </Col>
               <Col xs={8}>
-                <input placeholder={'Token'} value={token || props.token} onChange={(event) => setToken(event.target.value)}/>
+                <input placeholder={'Token'} value={token || props.token || ''} onChange={(event) => setToken(event.target.value)}/>
               </Col>
             </Row>
           </Container>
@@ -93,20 +93,27 @@ const JoinMeetingDialog = (props) => {
 
 export default connect(
   state => {
-    const {applicationId, userId, channel:channelName, token} = typedSelector(state, STORE_TYPE.AUTH);
+    const {
+      applicationId,
+      userId,
+      channelName,
+      token,
+      certificate,
+    } = typedSelector(state, STORE_TYPE.AUTH);
 
     return {
       applicationId,
       userId,
       channelName,
       token,
+      certificate,
     };
   },
   {
     setJointMeetingInputVisible: entryBoardActions.setJointMeetingInputVisible,
     setToken: authActions.setToken,
     setApplicationId: authActions.setApplicationId,
-    setChannel: authActions.setChannel,
+    setChannelName: authActions.setChannelName,
     setUserId: authActions.setUserId,
   }
 )(JoinMeetingDialog);

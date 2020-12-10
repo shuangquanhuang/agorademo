@@ -2,10 +2,12 @@ import STORE_TYPE from '../type';
 import createReducer from './common';
 
 const initialState = {
-  channel: null,
+  channelName: null,
   applicationId: null,
   token: null,
   userId: null,
+  expireTimeInSeconds: 0,
+  certificate: null,
 };
 
 const reducer = createReducer(STORE_TYPE.AUTH, initialState);
