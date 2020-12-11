@@ -11,7 +11,7 @@ class TokenService {
       uid: userId,
     }
 
-    const resp = await fetch(process.env.REACT_APP_TOKEN_ENDPOINT, {
+    const resp = await fetch(TOKEN_SERVICE_ENDPOINT, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json;charset=UTF-8'
