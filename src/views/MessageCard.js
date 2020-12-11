@@ -27,14 +27,14 @@ const MessageCard = (props) => {
 
   const getMessage = () => {
     if (props.error) {
-      if (props instanceof Error) {
+      if (props.error.hasOwnProperty('message')) {
         return props.error.message;
       }
 
-      return props.error || '';
+      return JSON.stringify(props.error || '');
     }
-    
-    return props.message || '';
+
+    return JSON.stringify(props.message || '');
   }
 
   return (
