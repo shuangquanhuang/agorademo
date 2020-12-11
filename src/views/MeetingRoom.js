@@ -27,8 +27,7 @@ class MeetingRoom extends React.Component {
     this.clientUnSubscribers = [];
   }
 
-  async componentDidMount() {
-    this.client = new AgoraClient();
+  async componentDidMount() {    
     await this.startMeeting();
   }
 
@@ -166,9 +165,11 @@ class MeetingRoom extends React.Component {
       } = this.props;
   
       if (isEmpty(applicationId) || isEmpty(channelName) || isEmpty(userId)) {
+        this.props.setError('Please set channel name to join');
         return;
       }
 
+      this.client = new AgoraClient();
       const token = await TokenService.createToken({
         applicationId,
         expireTimeInSeconds,
