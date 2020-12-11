@@ -33,7 +33,7 @@ class AgoraClient {
     if (isEmpty(applicationId)) {
       throw new Error('applicationId cannot be empty')
     }
-    await this._client.init(applicationId);
+    await this._client.init(applicationId, () => Promise.resolve(), (e) => Promise.reject(e));
   }
 
   async join({token, channelName, userId}) {
@@ -69,12 +69,20 @@ class AgoraClient {
       streamID,
     });
     await stream.init();
-    await this._client.publish(stream);
+    await this._client.publish(stream, (e)=> Promise.reject(e));
   }
 
-  async leave() {
+  async leave(onSuccess, onFailure) {
     this.checkClient();
-    await this._client.leave();
+    await this._client.leave(onSuccess, onFailure);
+  }
+
+  publish(stream, onFailure) {
+    this._client.publish(stream, onFailure);
+  }
+
+  unpublish(stream, onFailure) {
+    this._client.unpublish(stream, onFailure);
   }
 
   subscribe(stream, callback) {

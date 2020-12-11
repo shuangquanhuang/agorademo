@@ -1,6 +1,8 @@
+const MEETING_SVERVICE_ENDPOINT = process.env.REACT_APP_MEETING_ENDPOINT.replace('hostname', window.location.hostname);
+
 class MeetingService {
   async fetchMeetingList() {
-    const resp = await fetch(process.env.REACT_APP_MEETING_ENDPOINT, {
+    const resp = await fetch(MEETING_SVERVICE_ENDPOINT, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8'
@@ -27,7 +29,7 @@ class MeetingService {
       description
     };
 
-    const resp = await fetch(process.env.REACT_APP_MEETING_ENDPOINT, {
+    const resp = await fetch(MEETING_SVERVICE_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8'
@@ -52,7 +54,7 @@ class MeetingService {
       channelName,
     };
 
-    const resp = await fetch(process.env.REACT_APP_MEETING_ENDPOINT + '/queryMeeting', {
+    const resp = await fetch(MEETING_SVERVICE_ENDPOINT + '/queryMeeting', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8'
@@ -71,7 +73,7 @@ class MeetingService {
   }
 
   async queryMeetingById(meetingId) {
-    const resp = await fetch(process.env.REACT_APP_MEETING_ENDPOINT + '/' + meetingId, {
+    const resp = await fetch(MEETING_SVERVICE_ENDPOINT + '/' + meetingId, {
       method: 'GET',
       mode: 'cors',
       cache: 'default',
