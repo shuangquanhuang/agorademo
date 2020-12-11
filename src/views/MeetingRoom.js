@@ -11,10 +11,10 @@ import {ArrowLeftCircle} from 'react-bootstrap-icons';
 import {ROUTES} from '../constants';
 import {TokenService} from '../service';
 import { withRouter } from "react-router-dom";
-import './MeetingBoard.scss';
+import './MeetingRoom.scss';
 
 
-class MeetingBoard extends React.Component {
+class MeetingRoom extends React.Component {
 
   constructor(props) {
     super(props);
@@ -258,4 +258,4 @@ export default connect(
     setMeetingStarted: meetingStatusActions.setMeetingStarted,
     setToken: authActions.setToken,
   }
-)(withRouter(MeetingBoard));
+)(withRouter(MeetingRoom));

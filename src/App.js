@@ -3,7 +3,7 @@ import './App.css';
 import {STORE_TYPE} from './store';
 import {typedSelector} from './store/selectors';
 import EntryBoard from './views/EntryBoard';
-import MeetingBoard from './views/MeetingBoard';
+import MeetingRoom from './views/MeetingRoom';
 import MessageCard from './views/MessageCard';
 import MeetingList from './views/MeetingList';
 import {connect} from 'react-redux';
@@ -79,7 +79,7 @@ function App(props) {
             <EntryBoard/>
           </Route>
           <Route path={ROUTES.MEETING}>
-            <MeetingBoard/>
+            <MeetingRoom/>
           </Route>
           <Route path={ROUTES.MEETING_LIST}>
             <MeetingList/>
