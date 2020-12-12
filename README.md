@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# Getting Started with Agora Demo App
+
+You can access demo at [AgoraDemo](https://www.tuanzimama.com/).
+
+If broswer blocks it because of untrusted certificate, type "thisisunsafe" to continue.
 
 ## Quick start
 
@@ -46,3 +50,59 @@ npm run start
 5. Nginx to server webpage and act as reverse proxy to backend service
 6. HTTPS (free certificate from aliyun)
 7. supervisord to keep backend service alive
+
+### Sequential Diagram For Join Meeting
+```
+@startuml
+
+autonumber
+
+
+App -> JoinMeetingDialog: click
+activate App
+activate JoinMeetingDialog
+
+JoinMeetingDialog -> ReactorRouterHistory: push
+activate ReactorRouterHistory
+deactivate JoinMeetingDialog
+
+ReactorRouterHistory -> MeetingRoom: show
+activate MeetingRoom
+deactivate ReactorRouterHistory
+
+MeetingRoom --> MeetingRoom: componentDidMount
+MeetingRoom -> MeetingRoom: startMeeting
+MeetingRoom -> AgoraClient: createClient
+activate AgoraClient
+
+MeetingRoom -> AgoraClient: on events
+AgoraClient -> AgoraClient: init
+AgoraClient -> AgoraClient: joinMeeting
+AgoraClient -> AgoraClient: publish
+
+AgoraClient --> MeetingRoom: onStreamPublished
+MeetingRoom -> MeetingRoom: add local stream player to view
+MeetingRoom -> StreamPlayer: play
+activate StreamPlayer
+AgoraClient --> MeetingRoom: onRemoteStreamAdded
+MeetingRoom -> MeetingRoom: add remote stream player to view
+AgoraClient --> MeetingRoom: onStreamSubscribed
+MeetingRoom -> RemoteStreamPlayer: play
+activate RemoteStreamPlayer
+
+AgoraClient --> MeetingRoom: onRemoteStreamRemoved
+MeetingRoom -> MeetingRoom: remote remote stream player from view
+MeetingRoom -> RemoteStreamPlayer: stop
+deactivate RemoteStreamPlayer
+
+
+MeetingRoom --> MeetingRoom: onLeaveClicked
+MeetingRoom -> StreamPlayer: stop
+MeetingRoom -> StreamPlayer: close
+deactivate StreamPlayer
+MeetingRoom -> AgoraClient: leave
+deactivate AgoraClient
+deactivate MeetingRoom
+
+@enduml
+```

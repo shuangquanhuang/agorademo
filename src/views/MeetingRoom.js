@@ -36,7 +36,7 @@ class MeetingRoom extends React.Component {
     const {localStream, remoteStreamList} = this.state;
     const {localStream: nextLocalStream, remoteStreamList: nextRemoteStreamList} = nextState;
 
-    return localStream !== nextLocalStream || remoteStreamList != nextRemoteStreamList;
+    return localStream !== nextLocalStream || remoteStreamList !== nextRemoteStreamList;
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {

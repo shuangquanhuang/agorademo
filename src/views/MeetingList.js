@@ -40,7 +40,7 @@ const MeetingList = (props) => {
     {dataField: 'description', text: 'Description'},
     {dataField: 'creationTime', text: 'Creation Time', formatter: (cellContent, row) => {
       try {
-        return momemt(parseInt(cellContent)).format("DD-MM-YYYY HH:mm:ss");
+        return momemt(parseInt(cellContent)).format("YYYY-MM-DD HH:mm:ss");
       } catch (e) {
         return '';
       }
@@ -66,7 +66,6 @@ const MeetingList = (props) => {
     </div>
   );
 }
-
 
 export default connect(null, {
   setToken: authActions.setToken,

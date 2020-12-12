@@ -1,7 +1,7 @@
 import {Modal, Button, Container, Row, Col} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import React, { useState } from 'react';
-import  {isEmpty} from 'loadsh';
+import {isEmpty} from 'loadsh';
 import classNames from 'classnames';
 import {authActions, entryBoardActions, messageActions} from '../store/actions';
 import { typedSelector } from '../store/selectors';

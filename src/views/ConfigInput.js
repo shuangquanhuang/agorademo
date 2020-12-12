@@ -24,7 +24,7 @@ const ConfigInput = (props) => {
     if (!selectedMicrophone) {
       setSelectedMicrophone(props.microphone);
     }
-  }, [props]);
+  }, [props, selectedCamera, selectedMicrophone]);
 
   const onCancel = () => {
     props.setConfigInputVisible(false);
