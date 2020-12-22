@@ -1,5 +1,5 @@
-import createAction from './common';
 import STORE_TYPE from '../type';
+import createAction from './common';
 
 const setChannelName = (channelName) => createAction(STORE_TYPE.AUTH, {channelName});
 const setToken = (token) =>  createAction(STORE_TYPE.AUTH, {token});

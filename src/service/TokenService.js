@@ -1,6 +1,5 @@
 const TOKEN_SERVICE_ENDPOINT = process.env.REACT_APP_TOKEN_ENDPOINT.replace('hostname', window.location.hostname);
 
-
 class TokenService {
   async createToken({applicationId, expireTimeInSeconds, certificate, channelName, userId}) {
     const data = {
@@ -20,7 +19,7 @@ class TokenService {
           cache: 'default',
           body: JSON.stringify(data)
       });
-      
+
       const respJson = await (resp.ok ? resp.json() : Promise.reject());
       if (respJson && respJson['success']) {
           return respJson['token'];

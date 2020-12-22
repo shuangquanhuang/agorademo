@@ -1,7 +1,7 @@
 import AgoraRTC from 'agora-rtc-sdk';
 import enhanceAgoraRTC from 'agoran-awe';
-import {CODEC, MODE, AgoraConfigBuilder} from './configbuilder';
 import {isEmpty} from 'loadsh';
+import {AgoraConfigBuilder, CODEC, MODE} from './configbuilder';
 
 const enhancedAgoraRTC = enhanceAgoraRTC(AgoraRTC)
 

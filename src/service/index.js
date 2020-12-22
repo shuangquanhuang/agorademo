@@ -1,5 +1,5 @@
-import TokenService from './TokenService';
 import MeetingService from './MeetingService';
+import TokenService from './TokenService';
 
 export {
   TokenService,

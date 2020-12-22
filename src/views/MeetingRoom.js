@@ -192,7 +192,7 @@ class MeetingRoom extends React.Component {
       await client.init(applicationId)
       await client.join({token, channelName, userId})
 
-      this.clientUnSubscribers.push(client.addEventListener(AgoraEvents.STREAM_PUBLISHD, this.onStreamPublished.bind(this)));
+      this.clientUnSubscribers.push(client.addEventListener(AgoraEvents.STREAM_PUBLISHED, this.onStreamPublished.bind(this)));
       this.clientUnSubscribers.push(client.addEventListener(AgoraEvents.STREAM_SUBSCRIBED, this.onStreamSubcribed.bind(this)));
       this.clientUnSubscribers.push(client.addEventListener(AgoraEvents.STREAM_ADDED, this.onRemoteStreamAdded.bind(this)));
       this.clientUnSubscribers.push(client.addEventListener(AgoraEvents.STREAM_REMOVED, this.onRemoteStreamRemoved.bind(this)));

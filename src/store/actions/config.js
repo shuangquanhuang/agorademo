@@ -1,5 +1,5 @@
-import createAction from './common';
 import STORE_TYPE from '../type';
+import createAction from './common';
 
 const setLiveMode = (mode) => createAction(STORE_TYPE.CONFIG, {mode});
 const setCodec = (codec) => createAction(STORE_TYPE.CONFIG, {codec});
