@@ -1,16 +1,15 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {StreamPlayer, AgoraClient, AgoraConfigBuilder} from '../agora';
-import {STORE_TYPE} from '../store';
-import {messageActions, clientActions, meetingStatusActions, authActions} from '../store/actions';
-import {typedSelector} from '../store/selectors';
-import {AgoraEvents} from '../agora';
 import {isEmpty} from 'loadsh';
+import React from 'react';
 import {Button} from 'react-bootstrap';
 import {ArrowLeftCircle} from 'react-bootstrap-icons';
+import {connect} from 'react-redux';
+import {withRouter} from "react-router-dom";
+import {AgoraClient, AgoraConfigBuilder, AgoraEvents, StreamPlayer} from '../agora';
 import {ROUTES} from '../constants';
 import {TokenService} from '../service';
-import { withRouter } from "react-router-dom";
+import {STORE_TYPE} from '../store';
+import {authActions, clientActions, meetingStatusActions, messageActions} from '../store/actions';
+import {typedSelector} from '../store/selectors';
 import './MeetingRoom.scss';
 
 
@@ -18,7 +17,7 @@ class MeetingRoom extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {      
+    this.state = {
       localStream: null,
       remoteStreamList: [],
     };
@@ -27,11 +26,11 @@ class MeetingRoom extends React.Component {
     this.clientUnSubscribers = [];
   }
 
-  async componentDidMount() {    
+  async componentDidMount() {
     await this.startMeeting();
   }
 
-  
+
   shouldComponentUpdate(nextProps, nextState) {
     const {localStream, remoteStreamList} = this.state;
     const {localStream: nextLocalStream, remoteStreamList: nextRemoteStreamList} = nextState;
@@ -71,21 +70,23 @@ class MeetingRoom extends React.Component {
       )
     });
 
-    return <div className={'meeting-room'}>
-            <div className={'title'}>
-              <div className={'left'}>
-                <span>Meeting Room</span>
-              </div>
-              <div className={'right'}>
-                <Button variant={'light'} onClick={() => this.backToHome()}>
-                  <ArrowLeftCircle color={'royalblue'} size={25}/>
-                </Button>
-              </div>
-            </div>
-            <div className={'meeting-board'}>
-            {streams}
-            </div>      
+    return (
+      <div className={'meeting-room'}>
+        <div className={'title'}>
+          <div className={'left'}>
+            <span>Meeting Room</span>
           </div>
+          <div className={'right'}>
+            <Button variant={'light'} onClick={() => this.backToHome()}>
+              <ArrowLeftCircle color={'royalblue'} size={25}/>
+            </Button>
+          </div>
+        </div>
+        <div className={'meeting-board'}>
+          {streams}
+        </div>
+      </div>
+    );
   }
 
   onStreamPublished(event) {
@@ -108,7 +109,7 @@ class MeetingRoom extends React.Component {
 
   onStreamSubcribed(event) {
     const {stream} = event;
-    if (stream) {        
+    if (stream) {
       const streamId = stream.getId();
       const streamList = this.state.remoteStreamList;
       if (!streamList.find(item => item.getId() === streamId)) {
@@ -150,7 +151,7 @@ class MeetingRoom extends React.Component {
   };
 
   async startMeeting() {
-    try {      
+    try {
       const {
         applicationId,
         channelName,
@@ -163,7 +164,7 @@ class MeetingRoom extends React.Component {
         certificate,
         setToken
       } = this.props;
-  
+
       if (isEmpty(applicationId) || isEmpty(channelName) || isEmpty(userId)) {
         this.props.setError('Please set channel name to join');
         return;
@@ -177,7 +178,7 @@ class MeetingRoom extends React.Component {
         channelName,
         userId})
       setToken(token);
-      
+
       const configBuilder = new AgoraConfigBuilder();
       const config = configBuilder.setCodec(codec)
         .setMode(mode)
@@ -197,7 +198,7 @@ class MeetingRoom extends React.Component {
       this.clientUnSubscribers.push(client.addEventListener(AgoraEvents.STREAM_REMOVED, this.onRemoteStreamRemoved.bind(this)));
       this.clientUnSubscribers.push(client.addEventListener(AgoraEvents.PEER_LEAVE, this.onPeerLeave.bind(this)));
 
-      client.startStream({audio: true, video: true});      
+      await client.startStream({audio: true, video: true});
     } catch(e) {
       this.props.setError(e || 'Error while init agora client');
       this.props.setMeetingStarted(false);
@@ -230,9 +231,7 @@ class MeetingRoom extends React.Component {
     await this.leave();
     this.props.history.push(ROUTES.ROOT);
   }
-
 }
-
 
 export default connect(
   state => {

@@ -1,11 +1,11 @@
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import {Button, Modal} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {useHistory} from 'react-router';
 import {ROUTES} from '../constants';
+import {STORE_TYPE} from '../store';
 import {messageActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
-import {STORE_TYPE} from '../store';
 
 const MessageCard = (props) => {
 

@@ -1,16 +1,16 @@
+import momemt from 'moment';
 import React, {useEffect, useState} from 'react';
+import {Button} from 'react-bootstrap';
+import {ArrowLeftCircle} from 'react-bootstrap-icons';
+import BootstrapTable from 'react-bootstrap-table-next';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 import {connect} from 'react-redux';
 import {useHistory} from 'react-router';
 import {ROUTES} from '../constants';
 import {MeetingService} from '../service';
-import {Button} from 'react-bootstrap';
-import BootstrapTable from 'react-bootstrap-table-next';
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import './MeetingList.scss';
 import {authActions} from '../store/actions';
-import {ArrowLeftCircle} from 'react-bootstrap-icons';
-import momemt from 'moment';
+import './MeetingList.scss';
 
 const MeetingList = (props) => {
   const history = useHistory();

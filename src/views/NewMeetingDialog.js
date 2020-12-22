@@ -1,12 +1,12 @@
-import {Modal, Button, Container, Row, Col} from 'react-bootstrap';
-import {connect} from 'react-redux';
-import React, { useState } from 'react';
-import {isEmpty} from 'loadsh';
 import classNames from 'classnames';
+import {isEmpty} from 'loadsh';
+import React, {useState} from 'react';
+import {Button, Col, Container, Modal, Row} from 'react-bootstrap';
+import {connect} from 'react-redux';
+import {MeetingService} from '../service';
+import {STORE_TYPE} from '../store';
 import {authActions, entryBoardActions, messageActions} from '../store/actions';
 import {typedSelector} from '../store/selectors';
-import {STORE_TYPE} from '../store';
-import {MeetingService} from '../service';
 
 
 const NewMeetingDialog = (props) => {
@@ -40,6 +40,29 @@ const NewMeetingDialog = (props) => {
     }
   }
 
+  const getInputRows = () => {
+    const rows = [];
+    for (let [label, val, disabled, onChange] of [
+      ['Application ID', props.applicationId, true, null],
+      ['User ID', props.userId, true, null],
+      ['Channel Name', channelName, false, (event) => setChannelName(event.target.value)],
+      ['Description', description, false, (event) => setDescription(event.target.value)]
+    ]) {
+      rows.push(
+        <Row key={label}>
+          <Col xs={4}>
+            <span>{label + ':'}</span>
+          </Col>
+          <Col xs={8}>
+            <input placeholder={label} value={val} disabled={disabled} onChange={onChange}/>
+          </Col>
+        </Row>
+      )
+    }
+
+    return rows;
+  }
+
   return (
     <div>
 
@@ -56,38 +79,7 @@ const NewMeetingDialog = (props) => {
         </Modal.Header>
         <Modal.Body>
           <Container>
-            <Row>
-              <Col xs={4}>
-                <span>Application ID:</span>
-              </Col>
-              <Col xs={8}>
-                <input placeholder={'Application ID'} value={props.applicationId} disabled/>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={4}>
-                <span>User ID:</span>
-              </Col>
-              <Col xs={8}>
-                <input placeholder={'User ID'} value={props.userId} disabled/>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={4}>
-                <span>Channel Name:</span>
-              </Col>
-              <Col xs={8}>
-                <input placeholder={'Channel Name'} value={channelName} onChange={(event) => setChannelName(event.target.value)}/>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={4}>
-                <span>Description:</span>
-              </Col>
-              <Col xs={8}>
-                <input placeholder={'Description'} value={description} onChange={(event) => setDescription(event.target.value)}/>
-              </Col>
-            </Row>
+            {getInputRows()}
           </Container>
 
         </Modal.Body>

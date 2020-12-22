@@ -1,11 +1,11 @@
-import {connect} from 'react-redux';
 import React, {useEffect, useState} from 'react';
-import {Modal, Button, Container, Row, Col, Dropdown} from 'react-bootstrap';
-import {authActions, configActions, entryBoardActions} from '../store/actions';
-import './ConfigInput.scss';
-import { typedSelector } from '../store/selectors';
-import { STORE_TYPE } from '../store';
+import {Button, Col, Container, Dropdown, Modal, Row} from 'react-bootstrap';
+import {connect} from 'react-redux';
 import {CODEC, MODE} from '../agora';
+import {STORE_TYPE} from '../store';
+import {authActions, configActions, entryBoardActions} from '../store/actions';
+import {typedSelector} from '../store/selectors';
+import './ConfigInput.scss';
 
 
 const ConfigInput = (props) => {
@@ -15,7 +15,7 @@ const ConfigInput = (props) => {
   const [selectedCodec, setSelectedCodec] = useState(codecList[0]);
   const [modeList, ] = useState([...Object.values(MODE)]);
   const [selectedMode, setSelectedMode] = useState(modeList[0]);
-  
+
 
   useEffect(() => {
     if (!selectedCamera) {
@@ -82,6 +82,34 @@ const ConfigInput = (props) => {
     })
   }
 
+  const  getConfigRows = () => {
+    const rows = [];
+    for (let [label, val, items] of [
+      ['Camera:', selectedCamera && selectedCamera.label, getCameraItems()],
+      ['Microphone', selectedMicrophone && selectedMicrophone.label, getMicrophoneItems()],
+      ['Codec:', selectedCodec, getCodecItems()],
+      ['Mode:', selectedMode, getModeItems()]
+    ] ) {
+      rows.push(
+        <Row className={'config-input-row'} key={label}>
+          <Col xs={3}>
+            <span>{label}</span>
+          </Col>
+          <Col xs={9}>
+            <Dropdown size={'sm'}>
+              <Dropdown.Toggle variant={'secondary'}>{val}</Dropdown.Toggle>
+              <Dropdown.Menu>
+                {items}
+              </Dropdown.Menu>
+            </Dropdown>
+          </Col>
+        </Row>
+      );
+    }
+
+    return rows;
+  }
+
   return (
     <div>
       <Modal
@@ -98,60 +126,8 @@ const ConfigInput = (props) => {
         </Modal.Header>
         <Modal.Body>
           <Container>
-            <Row className={'config-input-row'}>
-              <Col xs={3}>
-                <span>Camera:</span>
-              </Col>
-              <Col xs={9}>
-                <Dropdown size={'sm'}>
-                  <Dropdown.Toggle variant={'secondary'}>{selectedCamera && selectedCamera.label}</Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {getCameraItems()}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-            </Row>
-            <Row className={'config-input-row'}>
-              <Col xs={3}>
-                <span>Microphone:</span>
-              </Col>
-              <Col xs={9}>
-                <Dropdown size={'sm'}>
-                  <Dropdown.Toggle variant={'secondary'}>{selectedMicrophone && selectedMicrophone.label}</Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {getMicrophoneItems()}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-            </Row>
-            <Row className={'config-input-row'}>
-              <Col xs={3}>
-                <span>Codec:</span>
-              </Col>
-              <Col xs={9}>
-                <Dropdown size={'sm'}>
-                  <Dropdown.Toggle variant={'secondary'}>{selectedCodec}</Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {getCodecItems()}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-            </Row>
-            <Row className={'config-input-row'}>
-              <Col xs={3}>
-                <span>Mode:</span>
-              </Col>
-              <Col xs={9}>
-                <Dropdown size={'sm'}>
-                  <Dropdown.Toggle variant={'secondary'}>{selectedMode}</Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {getModeItems()}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-            </Row>
+            {getConfigRows()}
           </Container>
-
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={onSubmit} >Submit</Button>

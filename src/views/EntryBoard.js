@@ -1,15 +1,15 @@
 import React from 'react';
 import {Button, Container} from 'react-bootstrap';
-import ConfigInput from './ConfigInput';
-import JoinMeetingDialog from './JoinMeetingDialog';
-import {entryBoardActions, messageActions, meetingStatusActions} from '../store/actions';
-import {typedSelector} from '../store/selectors';
-import {STORE_TYPE} from '../store';
 import {connect} from 'react-redux';
-import './EntryBoard.scss';
-import {ROUTES} from '../constants';
-import NewMeetingDialog from './NewMeetingDialog';
 import {useHistory} from 'react-router';
+import {ROUTES} from '../constants';
+import {STORE_TYPE} from '../store';
+import {entryBoardActions, meetingStatusActions, messageActions} from '../store/actions';
+import {typedSelector} from '../store/selectors';
+import ConfigInput from './ConfigInput';
+import './EntryBoard.scss';
+import JoinMeetingDialog from './JoinMeetingDialog';
+import NewMeetingDialog from './NewMeetingDialog';
 
 
 const EntryBoard = (props) => {
