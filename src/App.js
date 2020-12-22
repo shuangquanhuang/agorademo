@@ -1,21 +1,17 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
+import {connect} from 'react-redux';
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {v4 as uuidv4} from 'uuid';
+import {AgoraClient, AgoraConfigBuilder, AgoraEvents, CODEC, MODE} from './agora';
 import './App.css';
+import {ROUTES} from './constants';
 import {STORE_TYPE} from './store';
+import {authActions, clientActions, configActions} from './store/actions';
 import {typedSelector} from './store/selectors';
 import EntryBoard from './views/EntryBoard';
+import MeetingList from './views/MeetingList';
 import MeetingRoom from './views/MeetingRoom';
 import MessageCard from './views/MessageCard';
-import MeetingList from './views/MeetingList';
-import {connect} from 'react-redux';
-import {clientActions, authActions, configActions} from './store/actions';
-import { v4 as uuidv4 } from 'uuid';
-import {ROUTES} from './constants/RouteConstants';
-import {AgoraClient, AgoraConfigBuilder, AgoraEvents, CODEC, MODE} from './agora';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
 
 const fakeClient = new AgoraClient().createClient(AgoraConfigBuilder.defaultConfig());
 
