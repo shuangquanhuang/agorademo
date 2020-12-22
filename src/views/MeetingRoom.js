@@ -26,8 +26,8 @@ class MeetingRoom extends React.Component {
     this.clientUnSubscribers = [];
   }
 
-  async componentDidMount() {
-    await this.startMeeting();
+  componentDidMount() {
+    this.startMeeting().then(null);
   }
 
 
@@ -44,7 +44,7 @@ class MeetingRoom extends React.Component {
 
   componentWillUnmount() {
     this.clientUnSubscribers.forEach(unsub => unsub());
-    this.leave();
+    this.leave().then(r => {});
   }
 
 
@@ -227,9 +227,10 @@ class MeetingRoom extends React.Component {
     }
   }
 
-  async backToHome() {
-    await this.leave();
-    this.props.history.push(ROUTES.ROOT);
+  backToHome() {
+    this.leave().then(() => {
+      this.props.history.push(ROUTES.ROOT);
+    });
   }
 }
 
